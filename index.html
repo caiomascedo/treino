@@ -1,0 +1,1569 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Treinos do Caio</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treinos do Caio">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/VSd6FLPy/1-1.png">
+<meta name="theme-color" content="#b22222">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Arial Narrow', Arial, sans-serif; background: #fff; margin: 0; padding: 5px; display: flex; justify-content: center; }
+.container { max-width: 400px; width: 100%; border: 1px solid #ddd; padding: 5px; }
+.search-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #f5f5f5; padding: 5px; border-radius: 30px; }
+.search-bar input { flex: 2; border: none; border-radius: 30px; padding: 6px 12px; font-size: 0.75rem; outline: none; }
+.search-bar button { background: #2c3e50; color: white; border: none; border-radius: 30px; padding: 6px 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
+.search-bar button.save { background: #1e6f3f; }
+.search-bar button.list { background: #8b5a2b; }
+.search-bar button.copy { background: #b8860b; }
+.search-bar button.delete { background: #b22222; }
+.search-bar button.export { background: #2c3e50; }
+.search-bar button.import { background: #2c3e50; }
+.search-bar button.pdf { background: #dc143c; }
+.search-bar button.screenshot { background: #4a90e2; }
+.search-bar button.copy-full { background: #20b2aa; }
+.format-bar { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.format-btn { background: #555; color: white; border: none; border-radius: 30px; padding: 4px 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
+.global-buttons { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.global-btn { flex: 1; background: #2c3e50; color: white; border: none; border-radius: 30px; padding: 6px 0; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-align: center; }
+.global-btn.ocr { background: #8b5a2b; }
+.global-btn.full { background: #1e6f3f; }
+.global-btn.hide { background: #555; }
+.global-btn.add-f { background: #9b59b6; }
+.section { border: 1px solid #efefef; margin-bottom: 8px; padding: 4px 8px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.title-group { display: flex; gap: 6px; align-items: center; flex: 1; }
+h2 { font-size: 0.85rem; margin: 0; padding: 2px 0; min-height: 1.2em; text-transform: uppercase; cursor: text; }
+.sec-a h2 { color: #b22222; }
+.sec-b h2 { color: #b8860b; }
+.sec-c h2 { color: #2e8b57; }
+.sec-d h2 { color: #00008b; }
+.sec-e h2 { color: #20b2aa; }
+.sec-f h2 { color: #9b59b6; }
+.action-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
+.colar-btn, .clear-btn, .copy-section-btn, .copy-aluno-btn, .remove-f-btn { background: #b22222; color: white; border: none; border-radius: 20px; padding: 2px 10px; font-size: 0.65rem; cursor: pointer; }
+.copy-section-btn { background: #b8860b; }
+.copy-aluno-btn { background: #4a90e2; }
+.remove-f-btn { background: #e74c3c; }
+.clear-btn { background: #555; }
+ol { margin: 0; padding-left: 18px; }
+li, li * { font-size: 0.72rem !important; line-height: 1.4; color: #222; }
+.bold { font-weight: bold; }
+.footer { text-align: center; margin-top: 5px; font-size: 0.75rem; font-weight: bold; color: #555; }
+[contenteditable="true"]:focus { outline: none; background-color: #fffde7; }
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; }
+.modal-card { background: white; width: 90%; max-width: 400px; border-radius: 12px; padding: 16px; max-height: 80vh; overflow-y: auto; }
+.modal-card textarea { width: 100%; height: 200px; font-family: monospace; font-size: 0.8rem; margin-bottom: 10px; padding: 8px; }
+.modal-card button { background: #2c3e50; color: white; border: none; border-radius: 20px; padding: 6px 12px; margin-right: 8px; cursor: pointer; }
+.modal-card select { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 20px; }
+.aluno-list-item { padding: 10px; border-bottom: 1px solid #ddd; cursor: pointer; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.aluno-list-item:hover { background: #f0f0f0; }
+.aluno-info { flex: 1; }
+.aluno-nome { font-weight: bold; font-size: 0.85rem; }
+.aluno-preview { font-size: 0.65rem; color: #666; margin-top: 3px; }
+.aluno-titulo-preview { font-size: 0.65rem; color: #b22222; margin-top: 2px; font-style: italic; font-weight: bold; }
+.select-aluno-btn { background: #4a90e2; color: white; border: none; border-radius: 20px; padding: 5px 12px; font-size: 0.7rem; cursor: pointer; }
+.select-aluno-btn:hover { background: #357abd; }
+.image-preview { margin-top: 8px; text-align: center; display: none; }
+.image-preview img { max-width: 100%; max-height: 120px; border-radius: 8px; }
+.ocr-status { font-size: 0.7rem; color: #2e8b57; text-align: center; margin-top: 5px; }
+.hide-buttons .search-bar,
+.hide-buttons .format-bar,
+.hide-buttons .global-buttons,
+.hide-buttons .colar-btn,
+.hide-buttons .clear-btn,
+.hide-buttons .copy-section-btn,
+.hide-buttons .copy-aluno-btn,
+.hide-buttons .remove-f-btn { display: none; }
+.result-message { font-size: 0.7rem; text-align: center; margin-bottom: 5px; color: #b22222; }
+.double-tap-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; pointer-events: none; opacity: 0; transition: opacity 0.3s; z-index: 999; }
+.show-hint { opacity: 1; }
+.sec-f { display: none; }
+.sec-f.visible { display: block; }
+
+/* PDF VIEWER MODAL */
+#pdfViewerModal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85); z-index: 2000;
+  display: none; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 10px; overflow-y: auto;
+}
+#pdfViewerModal.open { display: flex; }
+#pdfViewerContent {
+  background: #fff; width: 100%; max-width: 600px;
+  border-radius: 12px; padding: 16px; position: relative;
+}
+#pdfViewerContent .pdf-close {
+  position: absolute; top: 10px; right: 12px;
+  background: #b22222; color: white; border: none;
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 0.75rem; cursor: pointer; font-weight: bold; z-index: 10;
+}
+#pdfViewerContent .pdf-download {
+  position: absolute; top: 10px; right: 90px;
+  background: #1e6f3f; color: white; border: none;
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 0.75rem; cursor: pointer; font-weight: bold; z-index: 10;
+}
+
+/* CONTEUDO DO PDF */
+#pdfBody {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  padding: 4px 6px;
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+  font-size: 8.5pt;
+  line-height: 1.25;
+}
+#pdfBody .pdf-title { font-size: 12pt; font-weight: bold; text-align: center; color: #b22222; margin-bottom: 2px; }
+#pdfBody .pdf-subtitle { font-size: 7.5pt; text-align: center; color: #555; margin-bottom: 4px; }
+#pdfBody .pdf-sec { margin-bottom: 5px; border-left: 2px solid #ccc; padding-left: 5px; }
+#pdfBody .pdf-sec-title { font-size: 8.5pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
+#pdfBody .pdf-ex-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 2px; border-bottom: 0.5px solid #f0f0f0; padding-bottom: 1px; }
+#pdfBody .pdf-ex-name { font-size: 7.5pt; flex: 1; color: #222; line-height: 1.2; }
+#pdfBody .pdf-ex-name span { font-weight: bold; }
+#pdfBody .yt-link { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 2px; 
+  background: #ff0000; 
+  color: #fff; 
+  border: none; 
+  border-radius: 3px; 
+  padding: 1px 4px; 
+  font-size: 6.5pt; 
+  font-weight: bold; 
+  text-decoration: none; 
+  white-space: nowrap; 
+  flex-shrink: 0; 
+}
+#pdfBody .yt-link:hover { 
+  background: #cc0000; 
+  text-decoration: none; 
+}
+#pdfBody .yt-link svg { 
+  width: 8px; 
+  height: 8px; 
+  fill: white; 
+}
+#pdfBody .pdf-footer { text-align: center; font-size: 6.5pt; color: #888; margin-top: 5px; border-top: 0.5px solid #eee; padding-top: 3px; }
+.sec-a-color { color: #b22222; border-color: #b22222 !important; }
+.sec-b-color { color: #b8860b; border-color: #b8860b !important; }
+.sec-c-color { color: #2e8b57; border-color: #2e8b57 !important; }
+.sec-d-color { color: #00008b; border-color: #00008b !important; }
+.sec-e-color { color: #20b2aa; border-color: #20b2aa !important; }
+.sec-f-color { color: #9b59b6; border-color: #9b59b6 !important; }
+
+@media print {
+  body { background: white; padding: 0; margin: 0; }
+  .container { max-width: 100%; border: none; padding: 10px; }
+  .search-bar, .format-bar, .global-buttons, .action-buttons,
+  .colar-btn, .clear-btn, .copy-section-btn, .copy-aluno-btn, .remove-f-btn,
+  .double-tap-hint, .result-message, .ocr-status, .image-preview { display: none !important; }
+  .section { break-inside: avoid; page-break-inside: avoid; }
+  h2, .footer { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+.temp-hide-buttons .search-bar,
+.temp-hide-buttons .format-bar,
+.temp-hide-buttons .global-buttons,
+.temp-hide-buttons .colar-btn,
+.temp-hide-buttons .clear-btn,
+.temp-hide-buttons .copy-section-btn,
+.temp-hide-buttons .copy-aluno-btn,
+.temp-hide-buttons .remove-f-btn,
+.temp-hide-buttons .action-buttons,
+.temp-hide-buttons .result-message { display: none !important; }
+
+/* PRÉVIA DO PRINT: o segundo toque mantém a permissão exigida pelo Safari/iOS */
+#printPreviewModal {
+  position: fixed; inset: 0; z-index: 3000; display: none;
+  background: rgba(0,0,0,.88); padding: max(12px, env(safe-area-inset-top)) 12px
+    max(12px, env(safe-area-inset-bottom)); overflow-y: auto;
+}
+#printPreviewModal.open { display: block; }
+.print-preview-card {
+  width: 100%; max-width: 520px; margin: 0 auto; background: #fff;
+  border-radius: 14px; padding: 12px; text-align: center;
+}
+#printPreviewImage { display: block; width: 100%; height: auto; border: 1px solid #ddd; }
+.print-preview-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+.print-preview-actions button {
+  flex: 1; border: 0; border-radius: 22px; padding: 10px 8px;
+  color: #fff; background: #1e6f3f; font-weight: bold; font-size: .8rem;
+}
+#closePrintPreview { background: #555; }
+.print-ios-hint { margin: 8px 0; color: #555; font-size: .75rem; }
+</style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+  <div class="search-bar">
+    <input type="text" id="searchName" placeholder="Nome do aluno" autocomplete="off">
+    <button id="searchBtn">🔍 Buscar</button>
+    <button id="saveBtn" class="save">💾 Salvar</button>
+    <button id="listBtn" class="list">📋 Lista</button>
+    <button id="copyBtn" class="copy">📑 Copiar</button>
+    <button id="deleteBtn" class="delete">🗑️ Apagar</button>
+    <button id="exportBtn" class="export">💾 Exportar JSON</button>
+    <button id="importBtn" class="import">📂 Carregar JSON</button>
+    <button id="pdfBtn" class="pdf">📄 PDF com YouTube</button>
+    <button id="screenshotBtn" class="screenshot">📸 Print</button>
+    <button id="copyFullTreinoBtn" class="copy-full">📋 Copiar Treino</button>
+  </div>
+  <div class="format-bar">
+    <button id="boldBtn" class="format-btn">B (Negrito)</button>
+    <button id="undoBtn" class="format-btn">↩️ Desfazer</button>
+    <button id="redoBtn" class="format-btn">↪️ Refazer</button>
+  </div>
+  <div id="resultMsg" class="result-message"></div>
+  <div class="global-buttons">
+    <button class="global-btn ocr" id="ocrImageBtn">📷 OCR via Imagem</button>
+    <button class="global-btn full" id="fullTreinoBtn">📝 Treino Completo</button>
+    <button class="global-btn add-f" id="addFBtn">➕ Adicionar Seção F</button>
+    <button class="global-btn hide" id="hideButtonsBtn">🔘 Esconder Botões</button>
+  </div>
+  <div id="ocrStatus" class="ocr-status"></div>
+  <div id="imagePreview" class="image-preview">
+    <img id="uploadedImage" alt="Pré-visualização">
+    <button id="removeImageBtn" style="background:#ccc;border:none;border-radius:12px;padding:2px 8px;">Remover</button>
+  </div>
+
+  <!-- Seção A -->
+  <div class="section sec-a">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">A. QUADRÍCEPS E GLÚTEO</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="A">📋 Colar</button>
+        <button class="copy-section-btn" data-section="A">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="A">📋 Lista</button>
+        <button class="clear-btn" data-section="A">🧹 Limpar</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Agachamento Smith</span> 4x 6-8</li><li><span class="bold">Leg Press 45 + Ag Sumo</span> 3x 8+10</li><li><span class="bold">Cadeira Extensora</span> 4x 10 (Falha Zerando)</li><li><span class="bold">Adutor</span> 3x 15" + 8-10</li><li><span class="bold">Step Up + Ag Frontal</span> 3x 8+20</li><li><span class="bold">Glúteo Na Polia</span> 3x 8</li></ol>
+  </div>
+
+  <!-- Seção B -->
+  <div class="section sec-b">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">B. FOCO OMBRO E BÍCEPS</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="B">📋 Colar</button>
+        <button class="copy-section-btn" data-section="B">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="B">📋 Lista</button>
+        <button class="clear-btn" data-section="B">🧹 Limpar</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Elevação Lateral</span> 4x 8</li><li><span class="bold">Desenv. Articulado</span> 3x 10</li><li><span class="bold">Elev. Frontal Barra Polia</span> 3x 6-8</li><li><span class="bold">Rosca Direta / Scott</span> 4x 6-8 / 3x 8</li><li><span class="bold">Rosca Martelo Corda+Halt.</span> 3x 6+6</li><li><span class="bold">Remada Alta</span> 3x 10</li></ol>
+  </div>
+
+  <!-- Seção C -->
+  <div class="section sec-c">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">C. GLÚTEO</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="C">📋 Colar</button>
+        <button class="copy-section-btn" data-section="C">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="C">📋 Lista</button>
+        <button class="clear-btn" data-section="C">🧹 Limpar</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Elevação Pélvica</span> 3x 6-10 (+100kg)</li><li><span class="bold">Glúteo Polia / Step Up</span> 3x 8 / 3x 12</li><li><span class="bold">Stiff + Bom Dia Smith</span> 3x 6-8+10</li><li><span class="bold">Cadeira Flexora</span> 3x 12 + Curtinhas</li><li><span class="bold">Mesa Flexora</span> 6-10 Pesadão</li><li><span class="bold">Panturrilha em Pé</span> 3x 10</li></ol>
+  </div>
+
+  <!-- Seção D -->
+  <div class="section sec-d">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">D. SUPERIORES</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="D">📋 Colar</button>
+        <button class="copy-section-btn" data-section="D">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="D">📋 Lista</button>
+        <button class="clear-btn" data-section="D">🧹 Limpar</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Puxado Frente / Remada</span> 3x 6-8 / 3x 12</li><li><span class="bold">Pull Down Barra Longa</span> 3x 8</li><li><span class="bold">Elev. Lateral / Frontal</span> 4x 8 / 3x 6-8</li><li><span class="bold">Tríceps Coice Corda</span> 3x 8-10</li><li><span class="bold">Tríceps Pulley + Testa</span> 3x 6+6</li></ol>
+  </div>
+
+  <!-- Seção E -->
+  <div class="section sec-e">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">E. LEG DAY</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="E">📋 Colar</button>
+        <button class="copy-section-btn" data-section="E">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="E">📋 Lista</button>
+        <button class="clear-btn" data-section="E">🧹 Limpar</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Elevação Pélvica</span> 4x 6-10</li><li><span class="bold">Step Up Polia / Glúteo</span> 3x 10 / 3x 8</li><li><span class="bold">Cadeira Flexora</span> 3x 12 + Curtinhas</li><li><span class="bold">Agachamento Smith</span> 3x 8</li><li><span class="bold">Cadeira Extensora</span> 4x 10 (Falha)</li><li><span class="bold">Panturrilha Pé</span> 3x 10 (2t 100kg)</li></ol>
+  </div>
+
+  <!-- Seção F (opcional) -->
+  <div class="section sec-f" id="secF">
+    <div class="section-header">
+      <div class="title-group"><h2 contenteditable="true">F. PERSONALIZADO</h2></div>
+      <div class="action-buttons">
+        <button class="colar-btn" data-section="F">📋 Colar</button>
+        <button class="copy-section-btn" data-section="F">📝 Copiar</button>
+        <button class="copy-aluno-btn" data-section="F">📋 Lista</button>
+        <button class="clear-btn" data-section="F">🧹 Limpar</button>
+        <button class="remove-f-btn" id="removeFBtn">🗑️ Remover F</button>
+      </div>
+    </div>
+    <ol contenteditable="true"><li><span class="bold">Exercício Exemplo</span> 3x 10-12</li><li><span class="bold">Outro Exercício</span> 4x 8-10</li></ol>
+  </div>
+
+  <div class="footer" contenteditable="true">Personal Caio Macêdo</div>
+</div>
+
+<div id="doubleTapHint" class="double-tap-hint">🔘 Toque duas vezes para mostrar botões</div>
+
+<div id="printPreviewModal" role="dialog" aria-modal="true" aria-label="Prévia do print">
+  <div class="print-preview-card">
+    <div class="print-preview-actions">
+      <button id="sharePrintBtn" type="button">Compartilhar / Salvar</button>
+      <button id="closePrintPreview" type="button">Fechar</button>
+    </div>
+    <p class="print-ios-hint">No iPhone: toque em “Compartilhar / Salvar” e depois em “Salvar Imagem”. Se não abrir, mantenha o dedo sobre a imagem.</p>
+    <img id="printPreviewImage" alt="Prévia do treino gerado">
+  </div>
+</div>
+
+<!-- PDF Viewer Modal com YouTube -->
+<div id="pdfViewerModal">
+  <div id="pdfViewerContent">
+    <button class="pdf-close" id="closePdfViewer">✕ Fechar</button>
+    <button class="pdf-download" id="downloadPdfBtn">⬇ Baixar PDF</button>
+    <div id="pdfBody"></div>
+  </div>
+</div>
+
+<!-- Modais -->
+<div id="genericModal" class="modal"><div class="modal-card" id="modalContent"></div></div>
+<div id="pasteModal" class="modal">
+  <div class="modal-card">
+    <textarea id="pasteTextarea" placeholder="Cole o treino completo ou de uma seção"></textarea>
+    <div>
+      <button id="confirmPasteBtn">✅ Preencher</button>
+      <button id="cancelPasteBtn">❌ Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const SECOES_BASE = ['A','B','C','D','E'];
+  let SECOES = [...SECOES_BASE];
+  let secaoFAtiva = false;
+  
+  const SEC_COLORS = { A:'sec-a-color', B:'sec-b-color', C:'sec-c-color', D:'sec-d-color', E:'sec-e-color', F:'sec-f-color' };
+  let autoSaveTimer = null;
+  let historyStack = [];
+  let currentIndex = -1;
+  let isUndoRedoAction = false;
+  let lastStateSnapshot = '';
+
+  /* ===== YOUTUBE ===== */
+  function ytSearchUrl(exerciseName) {
+    const clean = exerciseName.replace(/[\/\+\(\)]/g, ' ').trim();
+    return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(clean + ' academia como fazer');
+  }
+  function ytIcon() {
+    return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 6.2s-.3-1.9-1.1-2.7c-1-.9-2.1-.9-2.6-1C17.1 2.3 12 2.3 12 2.3s-5.1 0-7.8.2c-.5.1-1.6.1-2.6 1C.8 4.3.5 6.2.5 6.2S.2 8.4.2 10.6v2.1c0 2.2.3 4.4.3 4.4s.3 1.9 1.1 2.7c1 .9 2.3.9 2.9 1C6.5 21 12 21 12 21s5.1 0 7.8-.3c.5-.1 1.6-.1 2.6-1 .8-.8 1.1-2.7 1.1-2.7s.3-2.2.3-4.4v-2.1c0-2.2-.3-4.4-.3-4.4zM9.7 15.5V8.4l7 3.6-7 3.5z"/></svg>';
+  }
+
+  /* ===== GERENCIAR SEÇÃO F ===== */
+  function setSecaoFAtiva(ativa, silent) {
+    secaoFAtiva = !!ativa;
+    SECOES = secaoFAtiva ? ['A','B','C','D','E','F'] : ['A','B','C','D','E'];
+    var secFEl = document.getElementById('secF');
+    var addBtn = document.getElementById('addFBtn');
+    if (secFEl) secFEl.classList.toggle('visible', secaoFAtiva);
+    if (addBtn) addBtn.textContent = secaoFAtiva ? '❌ Remover Seção F' : '➕ Adicionar Seção F';
+    if (!silent) {
+      exibirMensagem(secaoFAtiva ? '✅ Seção F adicionada! Personalize o título e os exercícios.' : '❌ Seção F removida. Clique em "Adicionar Seção F" para reativar.', secaoFAtiva ? '#1e6f3f' : '#b8860b', false);
+      pushState();
+    }
+  }
+
+  function ativarSecaoF() {
+    if (!secaoFAtiva) setSecaoFAtiva(true, false);
+  }
+  
+  function desativarSecaoF() {
+    if (!secaoFAtiva) return;
+    if (confirm('Remover a seção F vai esconder os exercícios dela. Os dados NÃO serão perdidos - você pode reativar depois. Confirmar?')) {
+      setSecaoFAtiva(false, false);
+    }
+  }
+  
+  function toggleSecaoF() {
+    if (secaoFAtiva) {
+      desativarSecaoF();
+    } else {
+      ativarSecaoF();
+    }
+  }
+  /* ===== PEGAR EXERCÍCIOS DA SEÇÃO ===== */
+  function getExerciciosSecao(secId) {
+    const ol = sections[secId];
+    if (!ol) return [];
+    const result = [];
+    ol.querySelectorAll('li').forEach(li => {
+      const txt = li.innerText.trim();
+      if (txt && !txt.includes('Seção vazia') && !txt.includes('Nenhum exercício') && !txt.includes('Sem exercício') && !txt.includes('Sem treino')) {
+        const bold = li.querySelector('.bold');
+        const nome = bold ? bold.innerText.trim() : txt.split(' ').slice(0,3).join(' ');
+        const detalhes = txt.replace(nome, '').trim();
+        result.push({ nome, detalhes });
+      }
+    });
+    return result;
+  }
+  
+  function getPreviewSecao(aluno, secId) {
+    if (!aluno.treino || !aluno.treino[secId] || aluno.treino[secId].length === 0) {
+      return '⚠️ Sem exercícios cadastrados';
+    }
+    const exs = aluno.treino[secId];
+    const preview = exs.slice(0, 3).map(ex => {
+      const clean = ex.replace(/<[^>]*>/g, '').substring(0, 35);
+      return clean + (clean.length >= 35 ? '...' : '');
+    }).join(' • ');
+    return preview + (exs.length > 3 ? ` +${exs.length - 3} outros` : '');
+  }
+  
+  function getTituloSecao(secId) {
+    const h2 = document.querySelector('.sec-' + secId.toLowerCase() + ' h2');
+    return h2 ? h2.innerText.trim() : 'Seção ' + secId;
+  }
+  
+  function setTituloSecao(secId, titulo) {
+    const h2 = document.querySelector('.sec-' + secId.toLowerCase() + ' h2');
+    if (h2 && titulo) {
+      h2.innerText = titulo;
+    }
+  }
+
+  /* ===== GERAR PDF VIEWER COM YOUTUBE ===== */
+  function gerarPDFViewer() {
+    const nomeAluno = document.getElementById('searchName').value.trim() || 'Aluno';
+    const footer = document.querySelector('.footer') ? document.querySelector('.footer').innerText.trim() : 'Personal Caio Macêdo';
+    const hoje = new Date().toLocaleDateString('pt-BR');
+
+    let html = '<div class="pdf-title">Treino — ' + escHtml(nomeAluno) + '</div>';
+    html += '<div class="pdf-subtitle">Gerado em ' + escHtml(hoje) + ' | ' + escHtml(footer) + '</div>';
+
+    for (let sec of SECOES) {
+      const titulo = getTituloSecao(sec);
+      const exs = getExerciciosSecao(sec);
+      if (!exs.length) continue;
+      html += '<div class="pdf-sec ' + SEC_COLORS[sec] + '">';
+      html += '<div class="pdf-sec-title ' + SEC_COLORS[sec] + '">' + escHtml(titulo) + '</div>';
+      for (let ex of exs) {
+        const url = ytSearchUrl(ex.nome);
+        html += '<div class="pdf-ex-row">'
+          + '<div class="pdf-ex-name"><span>' + escHtml(ex.nome) + '</span> ' + escHtml(ex.detalhes) + '</div>'
+          + '<a href="' + escAttr(url) + '" target="_blank" rel="noopener" class="yt-link">' + ytIcon() + ' YouTube</a>'
+          + '</div>';
+      }
+      html += '</div>';
+    }
+    html += '<div class="pdf-footer">' + escHtml(footer) + ' — ' + escHtml(hoje) + '</div>';
+
+    document.getElementById('pdfBody').innerHTML = html;
+    document.getElementById('pdfViewerModal').classList.add('open');
+  }
+
+  document.getElementById('closePdfViewer').onclick = function() {
+    document.getElementById('pdfViewerModal').classList.remove('open');
+  };
+
+  document.getElementById('downloadPdfBtn').onclick = async function() {
+    const el = document.getElementById('pdfBody');
+    const nomeAluno = safeFileName(document.getElementById('searchName').value.trim() || 'treino');
+    
+    const opt = {
+      margin: [5, 8, 5, 8],
+      filename: 'treino_' + nomeAluno + '.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 1.8, useCORS: true, logging: false, letterRendering: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+      pagebreak: { mode: 'avoid-all' },
+      enableLinks: true
+    };
+    
+    exibirMensagem('📄 Preparando PDF tamanho A4...', '#1e6f3f', false);
+    try {
+      var pdfReady = await ensureHtml2Pdf();
+      if (!pdfReady) {
+        abrirPDFParaImpressao();
+        exibirMensagem('⚠️ CDN do PDF indisponível. Abrindo modo alternativo para salvar/imprimir com links.', '#b8860b', false);
+        return;
+      }
+      await html2pdf().set(opt).from(el).save();
+      exibirMensagem('✅ PDF salvo! Links do YouTube funcionam no PDF.', '#1e6f3f', false);
+    } catch(e) {
+      console.error(e);
+      exibirMensagem('❌ Erro ao gerar PDF', '#b22222', false);
+    }
+  };
+  /* ===== UTILITÁRIOS ===== */
+  function escHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(m) {
+      return ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[m]);
+    });
+  }
+  function escAttr(str) {
+    return escHtml(str);
+  }
+  function safeFileName(str) {
+    return String(str || 'treino').replace(/[\\/:*?"<>|]+/g, '_').replace(/\s+/g, '_').slice(0, 80);
+  }
+  function loadScriptOnce(src) {
+    return new Promise(function(resolve, reject) {
+      var existing = document.querySelector('script[src="' + src + '"]');
+      if (existing && existing.dataset.loaded === 'true') { resolve(); return; }
+      var script = existing || document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = function() { script.dataset.loaded = 'true'; resolve(); };
+      script.onerror = reject;
+      if (!existing) document.head.appendChild(script);
+    });
+  }
+  async function ensureHtml2Pdf() {
+    if (typeof html2pdf === 'function') return true;
+    var urls = [
+      'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+      'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js',
+      'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+    ];
+    for (var i = 0; i < urls.length; i++) {
+      try {
+        await loadScriptOnce(urls[i]);
+        if (typeof html2pdf === 'function') return true;
+      } catch(e) {}
+    }
+    return false;
+  }
+  function abrirPDFParaImpressao() {
+    var pdfBody = document.getElementById('pdfBody');
+    if (!pdfBody || !pdfBody.innerHTML.trim()) gerarPDFViewer();
+    var win = window.open('', '_blank');
+    if (!win) {
+      exibirMensagem('❌ Permita pop-ups para usar o modo alternativo de PDF.', '#b22222', false);
+      return;
+    }
+    win.document.open();
+    win.document.write('<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Treino PDF</title><style>' +
+      'body{font-family:Arial,sans-serif;margin:10mm;color:#222}.pdf-title{font-size:16px;font-weight:bold;text-align:center;color:#b22222}.pdf-subtitle,.pdf-footer{text-align:center;color:#555;font-size:11px}.pdf-sec{margin:8px 0;border-left:3px solid #ccc;padding-left:8px}.pdf-sec-title{font-weight:bold;text-transform:uppercase;margin-bottom:4px}.pdf-ex-row{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee;padding:3px 0}.pdf-ex-name{font-size:12px}.yt-link{background:#e00;color:white;text-decoration:none;border-radius:3px;padding:2px 5px;font-size:10px;font-weight:bold;white-space:nowrap}.yt-link svg{display:none}@media print{a[href]:after{content:""}}' +
+      '</style></head><body>' + pdfBody.innerHTML + '<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+    win.document.close();
+  }
+  /* ===== HISTÓRICO UNDO/REDO ===== */
+  function getCurrentState() {
+    var state = { sections: {}, titles: {}, footer: document.querySelector('.footer') ? document.querySelector('.footer').innerHTML : '', secaoFAtiva: secaoFAtiva };
+    for (var s of SECOES) {
+      state.sections[s] = sections[s] ? sections[s].innerHTML : '';
+      var h2 = document.querySelector('.sec-' + s.toLowerCase() + ' h2');
+      state.titles[s] = h2 ? h2.innerHTML : '';
+    }
+    return state;
+  }
+  function applyState(state) {
+    isUndoRedoAction = true;
+    if (state.secaoFAtiva !== undefined && state.secaoFAtiva !== secaoFAtiva) {
+      setSecaoFAtiva(state.secaoFAtiva, true);
+    }
+    for (var s of ['A','B','C','D','E','F']) {
+      if (sections[s] && state.sections[s] !== undefined) sections[s].innerHTML = state.sections[s];
+      var h2 = document.querySelector('.sec-' + s.toLowerCase() + ' h2');
+      if (h2 && state.titles[s] !== undefined) h2.innerHTML = state.titles[s];
+    }
+    var footer = document.querySelector('.footer');
+    if (footer && state.footer !== undefined) footer.innerHTML = state.footer;
+    isUndoRedoAction = false;
+    lastStateSnapshot = JSON.stringify(getCurrentState());
+    autoSave();
+  }
+  function pushState() {
+    if (isUndoRedoAction) return;
+    var newState = getCurrentState();
+    var snapshot = JSON.stringify(newState);
+    if (snapshot === lastStateSnapshot) return;
+    historyStack = historyStack.slice(0, currentIndex + 1);
+    historyStack.push(newState);
+    if (historyStack.length > 30) historyStack.shift();
+    currentIndex = historyStack.length - 1;
+    lastStateSnapshot = snapshot;
+    autoSave();
+  }
+  function undo() { if (currentIndex > 0) { currentIndex--; applyState(historyStack[currentIndex]); } }
+  function redo() { if (currentIndex < historyStack.length - 1) { currentIndex++; applyState(historyStack[currentIndex]); } }
+  function initHistory() { historyStack = [getCurrentState()]; currentIndex = 0; lastStateSnapshot = JSON.stringify(historyStack[0]); }
+
+  /* ===== AUTO SAVE ===== */
+  function autoSave() {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(function() {
+      var nome = document.getElementById('searchName').value.trim();
+      if (!nome) return;
+      var novoTreino = {};
+      var novoTitulos = {};
+      for (var sec of ['A','B','C','D','E','F']) {
+      var ol = sections[sec]; var exs = [];
+        if (ol) ol.querySelectorAll('li').forEach(function(li) {
+          var t = li.innerText.trim();
+          if (t && !t.includes('Seção vazia') && !t.includes('Nenhum exercício')) exs.push(t);
+        });
+        novoTreino[sec] = exs;
+        var h2 = document.querySelector('.sec-' + sec.toLowerCase() + ' h2');
+        if (h2) novoTitulos[sec] = h2.innerText.trim();
+      }
+      var idx = alunos.findIndex(function(a) { return a.nome.toLowerCase() === nome.toLowerCase(); });
+      if (idx !== -1) {
+        alunos[idx].treino = novoTreino;
+        alunos[idx].titulos = novoTitulos;
+        alunos[idx].secaoFAtiva = secaoFAtiva;
+      } else {
+        alunos.push({ nome: nome, treino: novoTreino, titulos: novoTitulos, secaoFAtiva: secaoFAtiva });
+      }
+      salvarLocalStorage();
+      exibirMensagem('💾 Auto-salvo!', '#1e6f3f', true);
+    }, 1000);
+  }
+
+  /* ===== OBSERVAR MUDANÇAS ===== */
+  function debounce(func, delay) {
+    var timer;
+    return function() { clearTimeout(timer); timer = setTimeout(function() { func(); }, delay); };
+  }
+  function insertPlainText(text) {
+    if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+      document.execCommand('insertText', false, text);
+      return;
+    }
+    var sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    var range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(text));
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  function observeEditableChanges() {
+    var debouncedPush = debounce(pushState, 500);
+    document.querySelectorAll('[contenteditable="true"]').forEach(function(el) {
+      el.addEventListener('input', debouncedPush);
+      el.addEventListener('blur', pushState);
+    });
+  }
+  /* ===== DADOS E LOCAL STORAGE ===== */
+  var dadosPadrao = [
+    { nome: "Caio Macedo", secaoFAtiva: false, titulos: { A:"A. QUADRÍCEPS E GLÚTEO", B:"B. FOCO OMBRO E BÍCEPS", C:"C. GLÚTEO", D:"D. SUPERIORES", E:"E. LEG DAY", F:"F. PERSONALIZADO" }, treino: {
+      A: ["Agachamento Smith 4x 6-8","Leg Press 45 + Ag Sumo 3x 8+10","Cadeira Extensora 4x 10 (Falha Zerando)","Adutor 3x 15\" + 8-10","Step Up + Ag Frontal 3x 8+20","Glúteo Na Polia 3x 8"],
+      B: ["Elevação Lateral 4x 8","Desenv. Articulado 3x 10","Elev. Frontal Barra Polia 3x 6-8","Rosca Direta / Scott 4x 6-8 / 3x 8","Rosca Martelo Corda+Halt. 3x 6+6","Remada Alta 3x 10"],
+      C: ["Elevação Pélvica 3x 6-10 (+100kg)","Glúteo Polia / Step Up 3x 8 / 3x 12","Stiff + Bom Dia Smith 3x 6-8+10","Cadeira Flexora 3x 12 + Curtinhas","Mesa Flexora 6-10 Pesadão","Panturrilha em Pé 3x 10"],
+      D: ["Puxado Frente / Remada 3x 6-8 / 3x 12","Pull Down Barra Longa 3x 8","Elev. Lateral / Frontal 4x 8 / 3x 6-8","Tríceps Coice Corda 3x 8-10","Tríceps Pulley + Testa 3x 6+6"],
+      E: ["Elevação Pélvica 4x 6-10","Step Up Polia / Glúteo 3x 10 / 3x 8","Cadeira Flexora 3x 12 + Curtinhas","Agachamento Smith 3x 8","Cadeira Extensora 4x 10 (Falha)","Panturrilha Pé 3x 10 (2t 100kg)"],
+      F: ["Exercício Exemplo 3x 10-12", "Outro Exercício 4x 8-10"]
+    }},
+    { nome: "João Silva", secaoFAtiva: true, titulos: { A:"A. PERNA COMPLETO", B:"B. TREINO SUPERIOR", C:"C. GLÚTEO E POSTERIOR", D:"D. PEITO E COSTAS", E:"E. LEG DAY", F:"F. MOBILIDADE" }, treino: {
+      A: ["Agachamento Livre 4x 10","Leg Press 45° 3x 12","Cadeira Extensora 3x 15","Panturrilha 4x 20"],
+      B: ["Desenvolvimento Halteres 4x 8","Rosca Direta 3x 10","Tríceps Corda 3x 12","Elevação Lateral 4x 10"],
+      C: ["Elevação Pélvica 4x 12","Stiff 3x 10","Cadeira Flexora 3x 15","Glúteo Polia 4x 10"],
+      D: ["Puxada Frontal 4x 10","Remada Curvada 3x 12","Supino Inclinado 4x 8","Crucifixo 3x 12"],
+      E: ["Agachamento Smith 4x 10","Cadeira Flexora 4x 12","Panturrilha 4x 20","Extensora 4x 12"],
+      F: ["Mobilidade de Quadril", "Alongamento Posterior", "Rotação de Ombro"]
+    }},
+    { nome: "Maria Oliveira", secaoFAtiva: false, titulos: { A:"A. TREINO DE PERNA", B:"B. SUPERIORES LEVE", C:"C. GLÚTEO FOCO", D:"D. COSTAS E PEITO", E:"E. PERNA COMPLETO", F:"F. PERSONALIZADO" }, treino: {
+      A: ["Agachamento Goblet 3x 12","Leg Press Horizontal 3x 15","Cadeira Extensora 3x 12","Panturrilha 3x 20"],
+      B: ["Elevação Lateral 4x 10","Rosca Scott 3x 12","Tríceps Testa 3x 12","Desenvolvimento 3x 10"],
+      C: ["Glúteo Polia 4x 12","Búlgaro 3x 10","Cadeira Flexora 3x 15","Elevação Pélvica 4x 12"],
+      D: ["Remada Baixa 4x 10","Puxada Triângulo 3x 12","Supino Reto 3x 10","Crucifixo 3x 12"],
+      E: ["Leg Press 45° 4x 12","Cadeira Flexora 4x 12","Panturrilha em Pé 4x 15","Agachamento Livre 3x 10"],
+      F: []
+    }}
+  ];
+  
+  var alunos = [];
+  function carregarLocalStorage() {
+    var dados = localStorage.getItem('treinoAlunos');
+    if (dados) {
+      try {
+        alunos = JSON.parse(dados);
+        alunos.forEach(function(a) { 
+          if (!a.treino) a.treino = {}; 
+          if (!a.titulos) a.titulos = {};
+          if (a.secaoFAtiva === undefined) a.secaoFAtiva = false;
+          ['A','B','C','D','E','F'].forEach(function(s) { 
+            if (!a.treino[s]) a.treino[s] = [];
+            if (!a.titulos[s]) a.titulos[s] = s + ". TREINO";
+          });
+        });
+        salvarLocalStorage();
+      } catch(e) { 
+        console.log("Erro ao carregar, usando dados padrão");
+        alunos = JSON.parse(JSON.stringify(dadosPadrao)); 
+        salvarLocalStorage(); 
+      }
+    } else { 
+      alunos = JSON.parse(JSON.stringify(dadosPadrao)); 
+      salvarLocalStorage(); 
+    }
+  }
+  
+  function salvarLocalStorage() {
+    try {
+      localStorage.setItem('treinoAlunos', JSON.stringify(alunos));
+    } catch(e) {
+      console.error('Erro ao salvar no localStorage:', e);
+      if (typeof exibirMensagem === 'function') {
+        exibirMensagem('❌ Não foi possível salvar no navegador. Exporte o JSON para backup.', '#b22222', false);
+      }
+    }
+  }
+  
+  carregarLocalStorage();
+
+  var sections = {
+    A: document.querySelector('.sec-a ol'),
+    B: document.querySelector('.sec-b ol'),
+    C: document.querySelector('.sec-c ol'),
+    D: document.querySelector('.sec-d ol'),
+    E: document.querySelector('.sec-e ol'),
+    F: document.querySelector('.sec-f ol')
+  };
+
+  /* ===== FORMATAR TEXTO ===== */
+  function normalizarTexto(t) {
+    var r = t.split(/(\s+)/).map(function(p) {
+      return p.trim() === '' ? p : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+    }).join('');
+    var ac = {'á':'á','é':'é','í':'í','ó':'ó','ú':'ú','à':'à','ã':'ã','õ':'õ','ç':'ç'};
+    Object.entries(ac).forEach(function(e) { r = r.split(e[0]).join(e[1]); });
+    return r;
+  }
+  function cleanLine(l) {
+    return normalizarTexto(l.replace(/^[\s\uFEFF\xA0]+/,'').replace(/^[•\-\*\d+\.\s]+/,'')).trim();
+  }
+  function formatExerciseLine(line) {
+    if (!line || line.trim() === '') return null;
+    var clean = cleanLine(line);
+    if (!clean) return null;
+    
+    // Suporte para " – " (espaço travessão)
+    var parts = clean.split(/\s*[–\-]\s*/);
+    if (parts.length >= 2) {
+      var name = parts[0].trim();
+      var details = parts.slice(1).join(' – ').trim();
+      if (name && details) {
+        return '<li><span class="bold">' + escHtml(name) + '</span> – ' + escHtml(details) + '</li>';
+      }
+    }
+    
+    // Formato padrão: nome + espaço + detalhes
+    var m = clean.match(/^(.+?)\s+(\d+[xX]?\s*[\d\s"\-\+\/\,\(\)]+.*)$/);
+    if (m) {
+      var name = m[1].trim();
+      var details = m[2].trim();
+      if (name && details) {
+        return '<li><span class="bold">' + escHtml(name) + '</span> ' + escHtml(details) + '</li>';
+      }
+    }
+    
+    // Fallback: tudo como nome
+    return '<li><span class="bold">' + escHtml(clean) + '</span></li>';
+  }
+
+  /* ===== NORMALIZAÇÃO DE TEXTO COLADO ===== */
+  // Detecta uma linha de título de seção, ex: "Treino A – Glúteos (Foco Pesado) + Quadríceps",
+  // "A. Glúteo", "B: Costas", "C - Posterior".
+  var TITLE_LINE_REGEX = /^(?:Treino\s*)?([A-F])\s*[\:\.\-–]\s*(.+)$/i;
+  function parseTitleLine(line) {
+    var m = String(line || '').trim().match(TITLE_LINE_REGEX);
+    if (!m) return null;
+    var tituloRaw = m[2].trim().replace(/^Treino\s+/i, '');
+    if (!tituloRaw) return null;
+    return { sec: m[1].toUpperCase(), titulo: tituloRaw };
+  }
+  // Alguns apps de notas (e o próprio iOS ao colar) "achatam" listas em uma única linha,
+  // usando o caractere ⠿ como separador entre os itens no lugar da quebra de linha.
+  // Isso fazia a numeração/ordenação bugar (tudo virava um item só). Aqui a gente
+  // transforma qualquer ⠿ (com espaços ao redor ou não) em quebra de linha ANTES de
+  // processar o texto colado, tanto no colar de uma seção quanto no Treino Completo/OCR.
+  function preprocessPastedText(text) {
+    if (!text) return '';
+    return String(text).replace(/\r\n?/g, '\n').replace(/\s*⠿\s*/g, '\n');
+  }
+
+  /* ===== PREENCHER / LIMPAR SEÇÕES ===== */
+  function preencherSecaoComArray(secId, exs) {
+    var ol = sections[secId]; if (!ol) return;
+    var lis = exs.map(function(e) { 
+      if (!e || e.trim() === '') return null;
+      return formatExerciseLine(e); 
+    }).filter(Boolean);
+    ol.innerHTML = lis.length ? lis.join('') : '<li><span class="bold">⚠️</span> Nenhum exercício</li>';
+    pushState();
+  }
+  
+  function preencherSecao(secId, rawText) {
+    var ol = sections[secId]; if (!ol) return;
+    rawText = preprocessPastedText(rawText);
+    
+    // Remover linhas de separação (======) e (ニニニニニニ)
+    var lines = rawText.split(/\r?\n/).filter(function(line) {
+      var trimmed = line.trim();
+      // Remove ====== e ニニニニニニ
+      if (/^[=ニ]+$/.test(trimmed)) return false;
+      return true;
+    });
+    
+    var tituloDetectado = null;
+    var lis = lines.map(function(l) { 
+      var cleaned = l.trim();
+      if (!cleaned) return null;
+      // Detectar e pular linhas que são títulos de seção (ex: "Treino A – Glúteos...")
+      var possivelTitulo = parseTitleLine(cleaned);
+      if (possivelTitulo) {
+        if (!tituloDetectado) tituloDetectado = possivelTitulo.titulo;
+        return null;
+      }
+      // Remover bullet points
+      cleaned = cleaned.replace(/^[•\-\*]\s*/, '');
+      // Remover números de lista
+      cleaned = cleaned.replace(/^\d+[\.\)]\s*/, '');
+      return formatExerciseLine(cleaned);
+    }).filter(Boolean);
+    
+    ol.innerHTML = lis.length ? lis.join('') : '<li><span class="bold">⚠️</span> Nenhum exercício válido</li>';
+    if (tituloDetectado) setTituloSecao(secId, secId + '. ' + tituloDetectado);
+    pushState();
+  }
+  
+  function limparSecao(secId) {
+    var ol = sections[secId];
+    if (ol) { ol.innerHTML = '<li><span class="bold">⚠️</span> Seção vazia</li>'; pushState(); }
+  }
+
+  /* ===== COPIAR ===== */
+  function copiarSecao(secId) {
+    var ol = sections[secId]; if (!ol) return;
+    var h2 = document.querySelector('.sec-' + secId.toLowerCase() + ' h2');
+    var titulo = h2 ? h2.innerText.trim() : 'Seção ' + secId;
+    var txt = titulo + '\n' + '='.repeat(titulo.length) + '\n';
+    ol.querySelectorAll('li').forEach(function(li) {
+      var t = li.innerText.trim();
+      if (t && !t.includes('Seção vazia') && !t.includes('Nenhum exercício')) txt += '• ' + t + '\n';
+    });
+    var ta = document.createElement('textarea'); ta.value = txt;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    exibirMensagem('📋 Seção ' + secId + ' copiada!', '#1e6f3f', false);
+  }
+  function copiarTreinoCompleto() {
+    var txt = '';
+    for (var sec of SECOES) {
+      var h2 = document.querySelector('.sec-' + sec.toLowerCase() + ' h2');
+      var titulo = h2 ? h2.innerText.trim() : 'Seção ' + sec;
+      txt += titulo + '\n' + '='.repeat(titulo.length) + '\n';
+      var ol = sections[sec];
+      if (ol) ol.querySelectorAll('li').forEach(function(li) {
+        var t = li.innerText.trim();
+        if (t && !t.includes('Seção vazia') && !t.includes('Nenhum exercício')) txt += '• ' + t + '\n';
+      });
+      txt += '\n';
+    }
+    var footer = document.querySelector('.footer');
+    if (footer) txt += footer.innerText.trim() + '\n';
+    var ta = document.createElement('textarea'); ta.value = txt;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    exibirMensagem('📋 Treino completo copiado!', '#1e6f3f', false);
+  }
+
+  /* ===== COPIAR TREINO DE OUTRO ALUNO PARA SEÇÃO ===== */
+  function copiarTreinoDeOutroAlunoParaSecao(secId) {
+    if (alunos.length === 0) {
+      exibirMensagem('❌ Nenhum aluno cadastrado.', '#b22222', false);
+      return;
+    }
+    
+    var modal = document.getElementById('genericModal');
+    var mc = document.getElementById('modalContent');
+    
+    var html = '<h3>📋 Copiar treino de outro aluno</h3>';
+    html += '<p style="font-size:0.75rem; color:#666;">Selecione um aluno para copiar o treino da <strong>Seção ' + secId + '</strong></p>';
+    html += '<div style="max-height:400px;overflow-y:auto;">';
+    
+    for (var i = 0; i < alunos.length; i++) {
+      var a = alunos[i];
+      var preview = getPreviewSecao(a, secId);
+      var tituloAluno = (a.titulos && a.titulos[secId]) ? a.titulos[secId] : (secId + ". SEM TÍTULO");
+      html += '<div class="aluno-list-item" style="flex-direction:column; align-items:flex-start;">';
+      html += '<div style="display:flex; justify-content:space-between; width:100%;">';
+      html += '<div class="aluno-info">';
+      html += '<div class="aluno-nome">👤 ' + escHtml(a.nome) + '</div>';
+      html += '<div class="aluno-titulo-preview">📌 Título: ' + escHtml(tituloAluno) + '</div>';
+      html += '<div class="aluno-preview">📋 ' + escHtml(preview) + '</div>';
+      html += '</div>';
+      html += '<button class="select-aluno-btn" data-nome="' + escAttr(a.nome) + '" data-sec="' + secId + '">📋 Selecionar</button>';
+      html += '</div></div>';
+    }
+    
+    html += '</div><button id="closeModalBtn" style="margin-top:12px;">Fechar</button>';
+    mc.innerHTML = html;
+    
+    mc.querySelectorAll('.select-aluno-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var nomeAluno = btn.getAttribute('data-nome');
+        var sec = btn.getAttribute('data-sec');
+        var alunoSelecionado = buscarAluno(nomeAluno);
+        
+        if (alunoSelecionado && alunoSelecionado.treino && alunoSelecionado.treino[sec]) {
+          var exercicios = alunoSelecionado.treino[sec];
+          
+          if (alunoSelecionado.titulos && alunoSelecionado.titulos[sec]) {
+            var novoTituloCompleto = alunoSelecionado.titulos[sec];
+            var h2 = document.querySelector('.sec-' + sec.toLowerCase() + ' h2');
+            if (h2) {
+              h2.innerText = novoTituloCompleto;
+            }
+          }
+          
+          if (exercicios.length > 0) {
+            preencherSecaoComArray(sec, exercicios);
+            exibirMensagem('✅ Treino da seção ' + sec + ' copiado de <strong>' + nomeAluno + '</strong>', '#1e6f3f', false);
+          } else {
+            exibirMensagem('⚠️ Aluno "' + nomeAluno + '" não tem exercícios na seção ' + sec, '#b8860b', false);
+          }
+        } else {
+          exibirMensagem('❌ Aluno "' + nomeAluno + '" não possui treino cadastrado para esta seção.', '#b22222', false);
+        }
+        modal.style.visibility = 'hidden';
+      });
+    });
+    
+    var cb = document.getElementById('closeModalBtn');
+    if (cb) cb.onclick = function() { modal.style.visibility = 'hidden'; };
+    modal.style.visibility = 'visible';
+  }
+
+  /* ===== CARREGAR/SALVAR/APAGAR ALUNO ===== */
+  function carregarTreinoAluno(aluno) {
+    if (!aluno || !aluno.treino) return false;
+    isUndoRedoAction = true;
+    setSecaoFAtiva(!!aluno.secaoFAtiva, true);
+    ['A','B','C','D','E','F'].forEach(function(sec) {
+      if (aluno.titulos && aluno.titulos[sec]) {
+        var h2 = document.querySelector('.sec-' + sec.toLowerCase() + ' h2');
+        if (h2) h2.innerText = aluno.titulos[sec];
+      }
+      if (aluno.treino[sec] && Array.isArray(aluno.treino[sec]) && aluno.treino[sec].length > 0) {
+        preencherSecaoComArray(sec, aluno.treino[sec]);
+      } else if (sections[sec]) {
+        sections[sec].innerHTML = '<li><span class="bold">⚠️</span> Sem treino cadastrado</li>';
+      }
+    });
+    isUndoRedoAction = false;
+    pushState(); 
+    return true;
+  }
+    function buscarAluno(nome) {
+    var n = nome.toLowerCase().trim(); if (!n) return null;
+    return alunos.find(function(a) { return a.nome.toLowerCase() === n; });
+  }
+  
+  function salvarAlunoAtual() {
+    var nome = document.getElementById('searchName').value.trim();
+    if (!nome) { exibirMensagem('❌ Digite um nome para salvar.', '#b22222', false); return; }
+    var novoTreino = {};
+    var novoTitulos = {};
+    for (var sec of ['A','B','C','D','E','F']) {
+      var ol = sections[sec]; var exs = [];
+      if (ol) ol.querySelectorAll('li').forEach(function(li) {
+        var t = li.innerText.trim();
+        if (t && !t.includes('Seção vazia') && !t.includes('Nenhum exercício')) exs.push(t);
+      });
+      novoTreino[sec] = exs;
+      var h2 = document.querySelector('.sec-' + sec.toLowerCase() + ' h2');
+      if (h2) novoTitulos[sec] = h2.innerText.trim();
+    }
+    var idx = alunos.findIndex(function(a) { return a.nome.toLowerCase() === nome.toLowerCase(); });
+    if (idx !== -1) {
+      alunos[idx].treino = novoTreino;
+      alunos[idx].titulos = novoTitulos;
+      alunos[idx].secaoFAtiva = secaoFAtiva;
+    } else {
+      alunos.push({ nome: nome, treino: novoTreino, titulos: novoTitulos, secaoFAtiva: secaoFAtiva });
+    }
+    salvarLocalStorage();
+    exibirMensagem('✅ Treino de <strong>' + nome + '</strong> salvo.', '#1e6f3f', false);
+    pushState();
+  }
+  
+  function apagarAlunoAtual() {
+    var nome = document.getElementById('searchName').value.trim();
+    if (!nome) { exibirMensagem('❌ Digite o nome do aluno a ser apagado.', '#b22222', false); return; }
+    var idx = alunos.findIndex(function(a) { return a.nome.toLowerCase() === nome.toLowerCase(); });
+    if (idx === -1) { exibirMensagem('❌ Aluno "' + nome + '" não encontrado.', '#b22222', false); return; }
+    alunos.splice(idx, 1); salvarLocalStorage();
+    exibirMensagem('🗑️ Aluno <strong>' + nome + '</strong> removido.', '#b22222', false);
+    document.getElementById('searchName').value = '';
+    if (alunos.length > 0) { carregarTreinoAluno(alunos[0]); document.getElementById('searchName').value = alunos[0].nome; }
+    else { 
+      SECOES.forEach(function(s) { if (sections[s]) sections[s].innerHTML = '<li><span class="bold">⚠️</span> Nenhum aluno</li>'; });
+    }
+    pushState();
+  }
+
+  /* ===== EXPORT / IMPORT JSON ===== */
+  function exportarJSON() {
+    var n = document.getElementById('searchName').value.trim(); if (n) salvarAlunoAtual();
+    var blob = new Blob([JSON.stringify(alunos, null, 2)], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url;
+    a.download = 'treinos_' + new Date().toISOString().slice(0,19) + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    exibirMensagem('💾 JSON exportado!', '#1e6f3f', false);
+  }
+  
+  function importarJSON() {
+    var input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
+    input.onchange = function(e) {
+      var file = e.target.files[0]; if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          var dados = JSON.parse(ev.target.result);
+          if (!Array.isArray(dados)) throw new Error();
+          dados.forEach(function(item) {
+            if (!item.nome || !item.treino) throw new Error();
+            if (!item.titulos) item.titulos = {};
+            if (item.secaoFAtiva === undefined) item.secaoFAtiva = false;
+            ['A','B','C','D','E','F'].forEach(function(s) { 
+              if (!item.treino[s]) item.treino[s] = [];
+              if (!item.titulos[s]) item.titulos[s] = s + ". TREINO";
+            });
+          });
+          alunos = dados; 
+          salvarLocalStorage();
+          exibirMensagem('📂 JSON carregado! ' + alunos.length + ' aluno(s).', '#1e6f3f', false);
+          if (alunos.length) { carregarTreinoAluno(alunos[0]); document.getElementById('searchName').value = alunos[0].nome; }
+          pushState();
+        } catch(err) { 
+          exibirMensagem('❌ JSON inválido.', '#b22222', false);
+        }
+      };
+      reader.readAsText(file, 'UTF-8');
+    };
+    input.click();
+  }
+
+  /* ===== MENSAGENS ===== */
+  function exibirMensagem(msg, cor, isAuto) {
+    var el = document.getElementById('resultMsg');
+    el.innerHTML = msg; el.style.color = cor;
+    setTimeout(function() { if (el.innerHTML === msg) el.innerHTML = ''; }, isAuto ? 2000 : 3000);
+  }
+
+  /* ===== LISTA DE ALUNOS ===== */
+  function mostrarListaAlunos() {
+    var modal = document.getElementById('genericModal');
+    var mc = document.getElementById('modalContent');
+    if (!alunos.length) {
+      mc.innerHTML = '<p>Nenhum aluno.</p><button id="closeModalBtn">Fechar</button>';
+    } else {
+      var html = '<h3>📋 Alunos</h3><div style="max-height:300px;overflow-y:auto;">';
+      alunos.forEach(function(a) {
+        html += '<div class="aluno-list-item" data-nome="' + escAttr(a.nome) + '">'
+          + '<span>' + escHtml(a.nome) + '</span>'
+          + '<div class="aluno-actions">'
+          + '<button class="edit-name-btn" data-nome="' + escAttr(a.nome) + '">✏️ Editar</button>'
+          + '<button class="delete-aluno-btn" data-nome="' + escAttr(a.nome) + '">🗑️ Apagar</button>'
+          + '</div></div>';
+      });
+      html += '</div><button id="closeModalBtn">Fechar</button>';
+      mc.innerHTML = html;
+      mc.querySelectorAll('.aluno-list-item span').forEach(function(sp) {
+        sp.addEventListener('click', function() {
+          var aluno = buscarAluno(sp.innerText);
+          if (aluno) { carregarTreinoAluno(aluno); document.getElementById('searchName').value = aluno.nome; exibirMensagem('✅ Treino de ' + aluno.nome + ' carregado.', '#1e6f3f', false); }
+          modal.style.visibility = 'hidden';
+        });
+      });
+      mc.querySelectorAll('.edit-name-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var old = btn.getAttribute('data-nome');
+          var novo = prompt('Novo nome:', old);
+          if (novo && novo !== old) {
+            var idx = alunos.findIndex(function(a) { return a.nome === old; });
+            if (idx !== -1) {
+              alunos[idx].nome = novo; salvarLocalStorage();
+              if (document.getElementById('searchName').value.trim() === old) document.getElementById('searchName').value = novo;
+              exibirMensagem('✏️ Nome alterado para "' + novo + '"', '#1e6f3f', false);
+              mostrarListaAlunos();
+            }
+          }
+        });
+      });
+      mc.querySelectorAll('.delete-aluno-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var nome = btn.getAttribute('data-nome');
+          if (confirm('Apagar "' + nome + '"?')) {
+            var idx = alunos.findIndex(function(a) { return a.nome === nome; });
+            if (idx !== -1) {
+              alunos.splice(idx, 1); salvarLocalStorage();
+              exibirMensagem('🗑️ "' + nome + '" removido.', '#b22222', false);
+              if (alunos.length === 0) {
+                document.getElementById('searchName').value = '';
+                SECOES.forEach(function(s) { if (sections[s]) sections[s].innerHTML = '<li><span class="bold">⚠️</span> Nenhum aluno</li>'; });
+              } else if (document.getElementById('searchName').value.trim() === nome) {
+                carregarTreinoAluno(alunos[0]); document.getElementById('searchName').value = alunos[0].nome;
+              }
+              mostrarListaAlunos();
+            }
+          }
+        });
+      });
+    }
+    var cb = document.getElementById('closeModalBtn');
+    if (cb) cb.onclick = function() { modal.style.visibility = 'hidden'; };
+    modal.style.visibility = 'visible';
+  }
+
+  /* ===== COPIAR TREINO ENTRE ALUNOS (COMPLETO) ===== */
+  function copiarTreinoEntreAlunos() {
+    var destNome = document.getElementById('searchName').value.trim();
+    if (!destNome) { exibirMensagem('❌ Digite o nome do destino.', '#b22222', false); return; }
+    var modal = document.getElementById('genericModal');
+    var mc = document.getElementById('modalContent');
+    if (!alunos.length) { mc.innerHTML = '<p>Nenhum aluno.</p><button id="closeModalBtn">Fechar</button>'; modal.style.visibility = 'visible'; return; }
+    var opts = alunos.map(function(a) { return '<option value="' + escAttr(a.nome) + '">' + escHtml(a.nome) + '</option>'; }).join('');
+    mc.innerHTML = '<h3>📑 Copiar Treino Completo</h3><label>Origem:</label><select id="origemSelect">' + opts + '</select>'
+      + '<label>Destino:</label><input type="text" id="destinoInput" value="' + escAttr(destNome) + '" style="width:100%;margin-bottom:10px;">'
+      + '<div><button id="confirmCopyBtn">✅ Copiar</button><button id="cancelCopyBtn">❌ Cancelar</button></div>';
+    document.getElementById('confirmCopyBtn').onclick = function() {
+      var oriNome = document.getElementById('origemSelect').value;
+      var dstNome = document.getElementById('destinoInput').value.trim();
+      if (!dstNome) return;
+      var ori = buscarAluno(oriNome); if (!ori) return;
+      var dst = buscarAluno(dstNome);
+      if (dst) {
+        dst.treino = JSON.parse(JSON.stringify(ori.treino));
+        dst.titulos = JSON.parse(JSON.stringify(ori.titulos));
+        dst.secaoFAtiva = ori.secaoFAtiva;
+      } else {
+        alunos.push({ nome: dstNome, treino: JSON.parse(JSON.stringify(ori.treino)), titulos: JSON.parse(JSON.stringify(ori.titulos)), secaoFAtiva: ori.secaoFAtiva });
+      }
+      salvarLocalStorage();
+      exibirMensagem('✅ Treino copiado de ' + oriNome + ' para ' + dstNome + '.', '#1e6f3f', false);
+      if (dstNome === document.getElementById('searchName').value.trim()) carregarTreinoAluno(buscarAluno(dstNome));
+      pushState(); modal.style.visibility = 'hidden';
+    };
+    document.getElementById('cancelCopyBtn').onclick = function() { modal.style.visibility = 'hidden'; };
+    modal.style.visibility = 'visible';
+  }
+
+  /* ===== SCREENSHOT ===== */
+  function canvasParaBlob(canvas, tipo, qualidade) {
+    return new Promise(function(resolve, reject) {
+      canvas.toBlob(function(blob) {
+        if (blob) resolve(blob);
+        else reject(new Error('O navegador não conseguiu criar a imagem.'));
+      }, tipo || 'image/png', qualidade);
+    });
+  }
+
+  function nomeArquivoSeguro(nome) {
+    return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '') || 'treino';
+  }
+
+  async function compartilharOuSalvarImagem(blob, nomeArquivo) {
+    var arquivo = new File([blob], nomeArquivo, { type: 'image/png' });
+
+    // No iPhone, a folha de compartilhamento permite "Salvar Imagem" e é
+    // muito mais confiável que o atributo download de um link temporário.
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [arquivo] }))) {
+      await navigator.share({ files: [arquivo], title: 'Treino' });
+      return 'compartilhado';
+    }
+
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = nomeArquivo;
+    link.rel = 'noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function() { URL.revokeObjectURL(link.href); }, 60000);
+    return 'salvo';
+  }
+
+  var printGeradoBlob = null;
+  var printGeradoNome = '';
+  var printPreviewUrl = '';
+
+  function abrirPreviaPrint(blob, nomeArquivo) {
+    if (printPreviewUrl) URL.revokeObjectURL(printPreviewUrl);
+    printGeradoBlob = blob;
+    printGeradoNome = nomeArquivo;
+    printPreviewUrl = URL.createObjectURL(blob);
+    document.getElementById('printPreviewImage').src = printPreviewUrl;
+    document.getElementById('printPreviewModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharPreviaPrint() {
+    document.getElementById('printPreviewModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('sharePrintBtn').addEventListener('click', function() {
+    if (!printGeradoBlob) return;
+    compartilharOuSalvarImagem(printGeradoBlob, printGeradoNome).then(function() {
+      exibirMensagem('✅ Print pronto! Escolha “Salvar Imagem”.', '#1e6f3f', false);
+    }).catch(function(e) {
+      if (!e || e.name !== 'AbortError') {
+        exibirMensagem('Mantenha o dedo sobre a prévia e escolha “Salvar em Fotos”.', '#b8860b', false);
+      }
+    });
+  });
+  document.getElementById('closePrintPreview').addEventListener('click', fecharPreviaPrint);
+
+  async function tirarPrint() {
+    var container = document.getElementById('mainContainer');
+    var nomeAluno = document.getElementById('searchName').value.trim() || 'treino';
+    container.classList.add('temp-hide-buttons');
+    window.scrollTo(0, 0);
+    await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+    exibirMensagem('📸 Gerando screenshot...', '#1e6f3f', false);
+    try {
+      var escala = Math.min(window.devicePixelRatio || 1, 2);
+      var canvas = await html2canvas(container, {
+        scale: escala,
+        backgroundColor: '#ffffff',
+        logging: false,
+        useCORS: true,
+        allowTaint: false,
+        scrollX: 0,
+        scrollY: 0,
+        width: container.scrollWidth,
+        height: container.scrollHeight,
+        windowWidth: document.documentElement.clientWidth,
+        windowHeight: container.scrollHeight
+      });
+      var blob = await canvasParaBlob(canvas, 'image/png');
+      abrirPreviaPrint(blob, 'treino_' + nomeArquivoSeguro(nomeAluno) + '.png');
+      exibirMensagem('✅ Print criado. Toque em “Compartilhar / Salvar”.', '#1e6f3f', false);
+    } catch(e) {
+      exibirMensagem('❌ Erro ao gerar print: ' + (e.message || 'tente novamente'), '#b22222', false);
+    } finally {
+      container.classList.remove('temp-hide-buttons');
+    }
+  }
+
+  /* ===== EVENTOS DOS BOTÕES ===== */
+  document.getElementById('searchBtn').addEventListener('click', function() {
+    var n = document.getElementById('searchName').value;
+    var a = buscarAluno(n);
+    if (a) { carregarTreinoAluno(a); exibirMensagem('✅ Treino de ' + a.nome + ' carregado.', '#1e6f3f', false); }
+    else exibirMensagem('❌ Nenhum aluno com "' + n + '".', '#b22222', false);
+  });
+  document.getElementById('saveBtn').addEventListener('click', function() { salvarAlunoAtual(); pushState(); });
+  document.getElementById('listBtn').addEventListener('click', mostrarListaAlunos);
+  document.getElementById('copyBtn').addEventListener('click', copiarTreinoEntreAlunos);
+  document.getElementById('deleteBtn').addEventListener('click', apagarAlunoAtual);
+  document.getElementById('exportBtn').addEventListener('click', exportarJSON);
+  document.getElementById('importBtn').addEventListener('click', importarJSON);
+  document.getElementById('pdfBtn').addEventListener('click', gerarPDFViewer);
+  document.getElementById('screenshotBtn').addEventListener('click', tirarPrint);
+  document.getElementById('copyFullTreinoBtn').addEventListener('click', copiarTreinoCompleto);
+  document.getElementById('addFBtn').addEventListener('click', toggleSecaoF);
+  document.getElementById('removeFBtn').addEventListener('click', desativarSecaoF);
+  document.getElementById('searchName').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+  });
+
+  /* ===== NEGRITO ===== */
+  function toggleBold() {
+    var sel = window.getSelection(); if (!sel.rangeCount) return;
+    var range = sel.getRangeAt(0); if (range.collapsed) return;
+    var cont = range.commonAncestorContainer;
+    while (cont && !cont.isContentEditable) cont = cont.parentElement;
+    if (!cont) return;
+    var isBold = false, node = range.startContainer;
+    while (node && node !== cont) {
+      if (node.nodeType===1 && (node.tagName==='B'||node.tagName==='STRONG'||(node.tagName==='SPAN'&&node.style.fontWeight==='bold'))) { isBold=true; break; }
+      node = node.parentElement;
+    }
+    if (isBold) {
+      var content = range.extractContents();
+      var walker = document.createTreeWalker(content, NodeFilter.SHOW_ELEMENT, {
+        acceptNode: function(n) { return (n.tagName==='B'||n.tagName==='STRONG'||(n.tagName==='SPAN'&&n.style.fontWeight==='bold')) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP; }
+      });
+      var toRemove = []; while (walker.nextNode()) toRemove.push(walker.currentNode);
+      toRemove.forEach(function(n) { var p = n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); });
+      range.deleteContents(); range.insertNode(content);
+    } else { document.execCommand('bold', false, null); }
+    range.collapse(false); sel.removeAllRanges(); sel.addRange(range); pushState();
+  }
+  document.getElementById('boldBtn').addEventListener('click', toggleBold);
+  document.querySelectorAll('.clear-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { limparSecao(btn.getAttribute('data-section')); });
+  });
+  document.querySelectorAll('.copy-section-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { copiarSecao(btn.getAttribute('data-section')); });
+  });
+  document.querySelectorAll('.copy-aluno-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { copiarTreinoDeOutroAlunoParaSecao(btn.getAttribute('data-section')); });
+  });
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('redoBtn').addEventListener('click', redo);
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key==='z') { e.preventDefault(); undo(); }
+    if (e.ctrlKey && (e.key==='y'||(e.shiftKey&&e.key==='Z'))) { e.preventDefault(); redo(); }
+  });
+
+  /* ===== PROCESSAR TREINO COMPLETO ===== */
+  function processFullTreino(rawText) {
+    rawText = preprocessPastedText(rawText);
+    var lines = rawText.split(/\r?\n/);
+    var secData = { A:[], B:[], C:[], D:[], E:[], F:[] };
+    var secTitles = { A:null, B:null, C:null, D:null, E:null, F:null };
+    var currentSec = null;
+    
+    // Remover linhas de separação (======) e (ニニニニニニ)
+    var filteredLines = lines.filter(function(line) {
+      var trimmed = line.trim();
+      if (/^[=ニ]+$/.test(trimmed)) return false;
+      return true;
+    });
+    
+    for (var i = 0; i < filteredLines.length; i++) {
+      var line = filteredLines[i].trim();
+      if (line === '') continue;
+      
+      // Detectar seção no formato "Treino A – Título" ou "A – Título" ou "A. Título" ou "A: Título"
+      var secMatch = line.match(/^(?:Treino\s*)?([A-F])\s*[\:\.\-–]\s*(.+)$/i);
+      if (secMatch) {
+        var secId = secMatch[1].toUpperCase();
+        var tituloRaw = secMatch[2].trim();
+        tituloRaw = tituloRaw.replace(/^Treino\s+/i, '');
+        secTitles[secId] = secId + '. ' + tituloRaw;
+        currentSec = secId;
+        continue;
+      }
+      
+      // Se for um número com ponto (ex: "1. Agachamento")
+      var numMatch = line.match(/^\d+[\.\)]\s*(.+)/);
+      if (numMatch && currentSec) {
+        secData[currentSec].push(numMatch[1].trim());
+        continue;
+      }
+      
+      // Se for um item com "•" ou "-"
+      var dashMatch = line.match(/^\s*[•\-\*]\s*(.+)/);
+      if (dashMatch && currentSec) {
+        secData[currentSec].push(dashMatch[1].trim());
+        continue;
+      }
+      
+      // Fallback: se tem currentSec, adiciona a linha
+      if (currentSec) {
+        secData[currentSec].push(line);
+      }
+    }
+    
+    // Ativar seção F se necessário
+    if (secTitles.F || secData.F.length > 0) {
+      if (!secaoFAtiva) ativarSecaoF();
+    }
+    
+    // Aplicar títulos
+    for (var sec of ['A','B','C','D','E','F']) {
+      if (secTitles[sec]) {
+        setTituloSecao(sec, secTitles[sec]);
+      }
+    }
+    
+    // Preencher exercícios
+    for (var sec of ['A','B','C','D','E','F']) {
+      if (secData[sec].length > 0 && sections[sec]) {
+        preencherSecao(sec, secData[sec].join('\n'));
+      } else if (sections[sec] && (!sections[sec].innerHTML || sections[sec].innerHTML.includes('Seção vazia') || sections[sec].innerHTML.includes('Nenhum exercício'))) {
+        sections[sec].innerHTML = '<li><span class="bold">⚠️</span> Sem exercícios</li>';
+      }
+    }
+    
+    pushState();
+    var btn = document.getElementById('fullTreinoBtn');
+    if (btn) { 
+      var old = btn.innerText; 
+      btn.innerText = '✅ Concluído!'; 
+      setTimeout(function() { btn.innerText = old; }, 1500); 
+    }
+    exibirMensagem('✅ Treino completo processado! Títulos atualizados.', '#1e6f3f', false);
+  }
+
+  /* ===== MODAL COLAR ===== */
+  var pasteModal = document.getElementById('pasteModal');
+  var modalMode = null, modalSection = null;
+  function openPasteModal(mode, section) {
+    modalMode = mode; modalSection = section || null;
+    document.getElementById('pasteTextarea').value = '';
+    pasteModal.style.visibility = 'visible';
+  }
+  document.getElementById('confirmPasteBtn').onclick = function() {
+    var txt = document.getElementById('pasteTextarea').value.trim(); if (!txt) return;
+    if (modalMode === 'section' && modalSection) {
+      preencherSecao(modalSection, txt);
+    } else if (modalMode === 'full') {
+      processFullTreino(txt);
+    }
+    pasteModal.style.visibility = 'hidden'; 
+    pushState();
+  };
+  document.getElementById('cancelPasteBtn').onclick = function() { pasteModal.style.visibility = 'hidden'; };
+  pasteModal.onclick = function(e) { if (e.target === pasteModal) pasteModal.style.visibility = 'hidden'; };
+  document.querySelectorAll('.colar-btn').forEach(function(btn) {
+    btn.onclick = function() { openPasteModal('section', btn.getAttribute('data-section')); };
+  });
+  document.getElementById('fullTreinoBtn').onclick = function() { openPasteModal('full'); };
+
+  /* ===== OCR ===== */
+  function prepararImagemParaOCR(file) {
+    return new Promise(function(resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function() {
+        try {
+          var limite = 2200;
+          var proporcao = Math.min(1, limite / Math.max(img.naturalWidth, img.naturalHeight));
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.round(img.naturalWidth * proporcao));
+          canvas.height = Math.max(1, Math.round(img.naturalHeight * proporcao));
+          var ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function(blob) {
+            URL.revokeObjectURL(url);
+            if (!blob) return reject(new Error('Não foi possível converter a foto.'));
+            resolve(blob);
+          }, 'image/jpeg', 0.92);
+        } catch(err) {
+          URL.revokeObjectURL(url);
+          reject(err);
+        }
+      };
+      img.onerror = function() {
+        URL.revokeObjectURL(url);
+        reject(new Error('Formato de foto não reconhecido. Em Ajustes > Câmera > Formatos, use “Mais Compatível”, ou envie uma captura de tela.'));
+      };
+      img.src = url;
+    });
+  }
+
+  document.getElementById('ocrImageBtn').onclick = function() {
+    var inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*,.heic,.heif';
+    inp.onchange = async function(e) {
+      var file = e.target.files[0]; if (!file) return;
+      try {
+        document.getElementById('ocrStatus').textContent = '🔄 Preparando imagem...';
+        var imagemOCR = await prepararImagemParaOCR(file);
+        var previewUrl = URL.createObjectURL(imagemOCR);
+        var preview = document.getElementById('uploadedImage');
+        preview.onload = function() { URL.revokeObjectURL(previewUrl); };
+        preview.src = previewUrl;
+        document.getElementById('imagePreview').style.display = 'block';
+        document.getElementById('ocrStatus').textContent = '🔄 OCR em andamento...';
+        var result = await Tesseract.recognize(imagemOCR, 'por');
+        document.getElementById('ocrStatus').textContent = '✅ OCR concluído!';
+        processFullTreino(result.data.text); pushState();
+        setTimeout(function() {
+          document.getElementById('ocrStatus').textContent = '';
+        }, 3000);
+      } catch(err) {
+        document.getElementById('ocrStatus').textContent = '❌ ' + (err.message || 'Erro no OCR.');
+        setTimeout(function() {
+          document.getElementById('ocrStatus').textContent = '';
+        }, 6000);
+      }
+    };
+    inp.click();
+  };
+  document.getElementById('removeImageBtn').onclick = function() {
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('uploadedImage').src = '';
+  };
+
+  /* ===== ESCONDER BOTÕES ===== */
+  var mainContainer = document.getElementById('mainContainer');
+  var hideBtn = document.getElementById('hideButtonsBtn');
+  var hint = document.getElementById('doubleTapHint');
+  var buttonsHidden = false;
+  var doubleTapTimer = null;
+  hideBtn.onclick = function() {
+    if (buttonsHidden) {
+      mainContainer.classList.remove('hide-buttons');
+      hideBtn.textContent = '🔘 Esconder Botões';
+      hint.classList.remove('show-hint');
+    } else {
+      mainContainer.classList.add('hide-buttons');
+      hideBtn.textContent = '🔘 Mostrar Botões';
+      hint.classList.add('show-hint');
+      setTimeout(function() { hint.classList.remove('show-hint'); }, 3000);
+    }
+    buttonsHidden = !buttonsHidden;
+  };
+  document.body.addEventListener('touchstart', function() {
+    if (!buttonsHidden) return;
+    if (doubleTapTimer) {
+      clearTimeout(doubleTapTimer); doubleTapTimer = null;
+      mainContainer.classList.remove('hide-buttons');
+      hideBtn.textContent = '🔘 Esconder Botões';
+      buttonsHidden = false; hint.classList.remove('show-hint');
+    } else {
+      doubleTapTimer = setTimeout(function() { doubleTapTimer = null; }, 300);
+    }
+  });
+  document.body.addEventListener('dblclick', function() {
+    if (!buttonsHidden) return;
+    mainContainer.classList.remove('hide-buttons');
+    hideBtn.textContent = '🔘 Esconder Botões';
+    buttonsHidden = false; hint.classList.remove('show-hint');
+  });
+
+  // Inicializar estado da seção F baseado nos dados do aluno atual
+  var alunoAtualNome = document.getElementById('searchName').value.trim();
+  if (alunoAtualNome) {
+    var alunoAtual = buscarAluno(alunoAtualNome);
+    if (alunoAtual && alunoAtual.secaoFAtiva) {
+      ativarSecaoF();
+    }
+  }
+
+  initHistory();
+  observeEditableChanges();
+  
+})();
+</script>
+</body>
+</html>
