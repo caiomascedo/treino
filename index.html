@@ -204,8 +204,122 @@ li, li * { font-size: 0.72rem !important; line-height: 1.4; color: #222; }
 #closePrintPreview { background: #555; }
 .print-ios-hint { margin: 8px 0; color: #555; font-size: .75rem; }
 </style>
+<style id="layoutExperimentStyles">
+/* Somente a apresentação: o editor e as exportações usam o código original. */
+@media screen {
+body.layout-experiment { display: block; padding: 20px 12px 40px; background: #edf2f7; font-family: Arial, sans-serif; }
+.layout-picker { max-width: 660px; margin: 0 auto 18px; color: #172534; }
+.layout-picker h1 { margin: 0 0 6px; font-size: 24px; letter-spacing: -.6px; }
+.layout-picker p { margin: 0 0 14px; font-size: 13px; line-height: 1.5; }
+.layout-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.layout-options button { flex: 1; min-width: 140px; text-align: left; padding: 12px; border: 1px solid #ccd6e0; border-radius: 12px; background: #fff; color: #172534; cursor: pointer; font: inherit; }
+.layout-options button strong, .layout-options button small { display: block; }
+.layout-options button small { margin-top: 5px; font-size: 11px; }
+.layout-options button[aria-pressed="true"] { border: 2px solid #2762dc; padding: 11px; background: #eaf1ff; }
+.layout-options button:focus-visible { outline: 3px solid #d27b00; outline-offset: 3px; }
+body.layout-experiment .container { max-width: 660px; margin: auto; padding: 18px; border: 0; border-radius: 18px; background: #fff; box-shadow: 0 8px 30px #20334a12; }
+body.layout-experiment .search-bar { border-radius: 12px; padding: 10px; gap: 8px; background: #f1f5f9; }
+body.layout-experiment .search-bar input { flex: 1 1 100%; min-width: 0; border: 1px solid #d7e0e9; border-radius: 8px; padding: 12px; font-size: 14px; }
+body.layout-experiment .search-bar button { flex: 1 1 auto; padding: 10px 12px; border-radius: 8px; font-size: 11px; }
+body.layout-experiment .format-bar { justify-content: flex-start; gap: 6px; padding: 8px 0; }
+body.layout-experiment .format-btn { padding: 8px 12px; border-radius: 7px; background: #475569; font-size: 11px; }
+body.layout-experiment .global-btn { flex: 1 1 45%; padding: 11px 8px; border-radius: 8px; font-size: 11px; }
+body.layout-experiment .section { margin: 16px 0; padding: 16px; border: 1px solid #e2e8f0; border-left: 4px solid #b22222; border-radius: 12px; background: #fff; }
+body.layout-experiment .sec-b { border-left-color: #b8860b; }
+body.layout-experiment .sec-c { border-left-color: #2e8b57; }
+body.layout-experiment .sec-d { border-left-color: #00008b; }
+body.layout-experiment .sec-e { border-left-color: #20b2aa; }
+body.layout-experiment .sec-f { border-left-color: #9b59b6; }
+body.layout-experiment .section-header { gap: 10px; margin-bottom: 10px; }
+body.layout-experiment .title-group { flex: 1 1 100%; min-width: 0; }
+body.layout-experiment h2 { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+body.layout-experiment .action-buttons { gap: 6px; }
+body.layout-experiment .action-buttons button { padding: 7px 10px; border-radius: 6px; font-size: 10px; }
+body.layout-experiment ol { padding-left: 22px; }
+body.layout-experiment li, body.layout-experiment li * { font-size: 13px !important; line-height: 1.6; }
+body.layout-experiment li { padding: 7px 2px; border-bottom: 1px solid #edf0f4; overflow-wrap: anywhere; }
+body.layout-experiment li:last-child { border-bottom: 0; }
+body.layout-experiment .footer { padding: 14px 0 4px; color: #64748b; }
+body.layout-experiment .modal-card { border-radius: 16px; max-width: 500px; }
+body.layout-experiment .modal-card button { margin-bottom: 6px; padding: 10px 12px; }
+body.layout-experiment[data-layout="sport"] { background: #101820; }
+body[data-layout="sport"] .layout-picker { color: #f5f7fa; }
+body[data-layout="sport"] .layout-options button { background: #1d2935; color: #fff; border-color: #415160; }
+body[data-layout="sport"] .layout-options button[aria-pressed="true"] { background: #c9f55b; color: #18210a; border-color: #c9f55b; }
+body.layout-experiment[data-layout="sport"] .container { border-radius: 4px; padding: 14px; background: #e8edf1; }
+body.layout-experiment[data-layout="sport"] .search-bar { background: #1d2935; border-radius: 4px; }
+body.layout-experiment[data-layout="sport"] .section { border-radius: 4px; border-left-width: 6px; box-shadow: 0 3px 0 #cbd5df; }
+body.layout-experiment[data-layout="sport"] .search-bar button, body.layout-experiment[data-layout="sport"] .global-btn { border-radius: 4px; }
+body.layout-experiment[data-layout="sport"] .search-bar .save { background: #c9f55b; color: #18210a; }
+body.layout-experiment[data-layout="sport"] h2 { font-size: 15px; font-weight: 900; letter-spacing: .5px; }
+body.layout-experiment[data-layout="sheet"] { background: #eee9df; font-family: Georgia, serif; }
+body[data-layout="sheet"] .layout-picker { color: #493a2c; }
+body[data-layout="sheet"] .layout-options button { border-radius: 3px; border-color: #cfc1ad; background: #fffdf8; color: #493a2c; }
+body[data-layout="sheet"] .layout-options button[aria-pressed="true"] { border-color: #785b3f; background: #f0e3cf; }
+body.layout-experiment[data-layout="sheet"] .container { background: #fffdf8; border: 1px solid #d6cbb9; border-radius: 3px; box-shadow: 4px 4px 0 #d6cbb9; }
+body.layout-experiment[data-layout="sheet"] .search-bar { background: #eee8dc; border-radius: 3px; }
+body.layout-experiment[data-layout="sheet"] .section { background: transparent; border: 0; border-top: 2px solid #cfc1ad; border-radius: 0; padding: 14px 2px; margin: 12px 0; }
+body.layout-experiment[data-layout="sheet"] h2 { font-family: Georgia, serif; font-size: 15px; }
+body.layout-experiment[data-layout="sheet"] li { border-bottom: 1px dashed #d8cebf; padding: 5px 2px; }
+body.layout-experiment[data-layout="sheet"] .action-buttons button { background: #785b3f; border-radius: 3px; }
+body.layout-experiment[data-layout="sheet"] .footer { font-family: Georgia, serif; color: #785b3f; }
+@media (max-width: 420px) {
+body.layout-experiment { padding: 12px 8px 24px; }
+body.layout-experiment .container { padding: 10px; }
+body.layout-experiment .section { padding: 12px 10px; }
+.layout-options button { min-width: 90px; padding: 9px; font-size: 12px; }
+.layout-options button[aria-pressed="true"] { padding: 8px; }
+}
+}
+@media print { .layout-picker { display: none !important; } }
+</style>
+<style id="vectorLayoutStyles">
+@media screen {
+body.layout-experiment[data-layout="vector"] { background: #e8e5ff; font-family: Arial, sans-serif; }
+body[data-layout="vector"] .layout-picker { max-width: 820px; color: #352869; }
+body[data-layout="vector"] .layout-picker h1 { font-size: 30px; }
+body[data-layout="vector"] .layout-options button { border-radius: 16px; border-color: #c5bcef; color: #493389; }
+body[data-layout="vector"] .layout-options button[aria-pressed="true"] { background: #6142ce; border-color: #6142ce; color: #fff; }
+.layout-options svg { float: right; margin-left: 4px; }
+body.layout-experiment[data-layout="vector"] .container { max-width: 820px; padding: 20px; border-radius: 24px; background: #faf9ff; }
+body.layout-experiment[data-layout="vector"] .search-bar { background: #eeeaff; border-radius: 18px; padding: 14px; }
+body.layout-experiment[data-layout="vector"] .search-bar button { background: #5941b7; border-radius: 12px; }
+body.layout-experiment[data-layout="vector"] .search-bar .save { background: #136f61; }
+body.layout-experiment[data-layout="vector"] .search-bar .delete { background: #b52d50; }
+body.layout-experiment[data-layout="vector"] .global-btn { border-radius: 14px; background: #5941b7; }
+body.layout-experiment[data-layout="vector"] .section { position: relative; border: 2px solid #d4cdf3; border-radius: 22px; padding: 20px; background: #fff; }
+body.layout-experiment[data-layout="vector"] .section-header { padding-left: 50px; min-height: 42px; }
+body.layout-experiment[data-layout="vector"] .section::before { content: ""; position: absolute; top: 18px; left: 16px; width: 40px; height: 40px; border-radius: 14px; background: #eeeaff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%235941b7' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M11 13v14M7 17v6m22-10v14m4-10v6M11 20h18'/%3E%3C/svg%3E") center/32px no-repeat; }
+body.layout-experiment[data-layout="vector"] .sec-b::before { background-color: #fff0d2; }
+body.layout-experiment[data-layout="vector"] .sec-c::before { background-color: #d8f5e7; }
+body.layout-experiment[data-layout="vector"] .sec-d::before { background-color: #dcecff; }
+body.layout-experiment[data-layout="vector"] .sec-e::before { background-color: #d9f5f7; }
+body.layout-experiment[data-layout="vector"] .sec-f::before { background-color: #f6dff5; }
+body.layout-experiment[data-layout="vector"] .action-buttons button { border-radius: 9px; }
+body.layout-experiment[data-layout="vector"] li { margin: 8px 0; padding: 10px 8px; border: 0; border-radius: 10px; background: #f6f4ff; }
+body.layout-experiment[data-layout="vector"] li::marker { color: #6142ce; font-weight: bold; }
+body.layout-experiment[data-layout="vector"] h2 { color: #493389; font-size: 15px; }
+body.layout-experiment[data-layout="vector"] .footer { color: #5941b7; }
+@media (max-width: 420px) {
+body.layout-experiment[data-layout="vector"] .container { padding: 10px; }
+body.layout-experiment[data-layout="vector"] .section { padding: 14px 10px; }
+body.layout-experiment[data-layout="vector"] .section::before { top: 14px; left: 10px; }
+body.layout-experiment[data-layout="vector"] .section-header { padding-left: 46px; }
+}
+}
+</style>
 </head>
-<body>
+<body class="layout-experiment" data-layout="clean">
+<header class="layout-picker" aria-label="Escolher aparência">
+  <h1>Treinos do Caio</h1>
+  <p>Escolha o visual. Você continua montando e editando o treino do mesmo jeito.</p>
+  <div class="layout-options" role="group" aria-label="Modelos de layout">
+    <button type="button" data-layout-choice="clean" aria-pressed="true"><strong>1. Claro</strong><small>Limpo e organizado</small></button>
+    <button type="button" data-layout-choice="sport" aria-pressed="false"><strong>2. Esportivo</strong><small>Escuro com verde</small></button>
+    <button type="button" data-layout-choice="sheet" aria-pressed="false"><strong>3. Ficha</strong><small>Papel e tons quentes</small></button>
+    <button type="button" data-layout-choice="vector" aria-pressed="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8v8M3 10v4m15-6v8m3-6v4M6 12h12"/><circle cx="12" cy="12" r="10"/></svg><strong>4. Vetorial</strong><small>Ícones, formas e cores</small></button>
+  </div>
+</header>
 <div class="container" id="mainContainer">
   <div class="search-bar">
     <input type="text" id="searchName" placeholder="Nome do aluno" autocomplete="off">
@@ -1563,6 +1677,28 @@ li, li * { font-size: 0.72rem !important; line-height: 1.4; color: #222; }
   initHistory();
   observeEditableChanges();
   
+})();
+</script>
+<script id="layoutExperimentScript">
+(function () {
+  var choices = document.querySelectorAll('[data-layout-choice]');
+  function applyLayout(value) {
+    if (['clean', 'sport', 'sheet', 'vector'].indexOf(value) === -1) value = 'clean';
+    document.body.setAttribute('data-layout', value);
+    choices.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-layout-choice') === value));
+    });
+  }
+  var saved = 'clean';
+  try { saved = localStorage.getItem('caio_layout_experiment') || 'clean'; } catch (e) {}
+  applyLayout(saved);
+  choices.forEach(function (button) {
+    button.addEventListener('click', function () {
+      var value = button.getAttribute('data-layout-choice');
+      applyLayout(value);
+      try { localStorage.setItem('caio_layout_experiment', value); } catch (e) {}
+    });
+  });
 })();
 </script>
 </body>
