@@ -308,18 +308,50 @@ body.layout-experiment[data-layout="vector"] .section-header { padding-left: 46p
 }
 }
 </style>
+<style id="compactLayoutStyles">
+@media screen {
+body.layout-experiment { padding: 5px 5px 14px; }
+body.layout-experiment .container { max-width: 400px; padding: 6px; border-radius: 10px; }
+body.layout-experiment .search-bar { padding: 5px; gap: 5px; margin-bottom: 7px; border-radius: 8px; }
+body.layout-experiment .search-bar input { flex: 2 1 130px; padding: 6px 9px; font-size: .75rem; border-radius: 7px; }
+body.layout-experiment .search-bar button { flex: 0 1 auto; padding: 6px 9px; font-size: .7rem; border-radius: 7px; }
+body.layout-experiment .format-bar { gap: 5px; padding: 0; margin-bottom: 7px; }
+body.layout-experiment .format-btn { padding: 4px 9px; font-size: .7rem; }
+body.layout-experiment .global-buttons { gap: 5px; margin-bottom: 7px; }
+body.layout-experiment .global-btn { flex: 1 1 75px; padding: 6px 4px; font-size: .7rem; border-radius: 7px; }
+body.layout-experiment .section { margin: 7px 0; padding: 5px 8px; border-radius: 8px; }
+body.layout-experiment .section-header { gap: 5px; margin-bottom: 4px; }
+body.layout-experiment .title-group { flex: 1 1 auto; }
+body.layout-experiment h2 { font-size: .85rem; line-height: 1.4; }
+body.layout-experiment .action-buttons { gap: 4px; }
+body.layout-experiment .action-buttons button { padding: 3px 7px; font-size: .65rem; border-radius: 6px; }
+body.layout-experiment ol { padding-left: 18px; }
+body.layout-experiment li, body.layout-experiment li * { font-size: .72rem !important; line-height: 1.4; }
+body.layout-experiment li { padding: 3px 1px; }
+body.layout-experiment .footer { padding: 5px 0 2px; }
+body.layout-experiment[data-layout="sport"] .container,
+body.layout-experiment[data-layout="sheet"] .container,
+body.layout-experiment[data-layout="vector"] .container { max-width: 400px; padding: 6px; }
+body.layout-experiment[data-layout="sport"] h2,
+body.layout-experiment[data-layout="sheet"] h2,
+body.layout-experiment[data-layout="vector"] h2 { font-size: .85rem; }
+body.layout-experiment[data-layout="sheet"] .section { padding: 6px 2px; margin: 7px 0; }
+body.layout-experiment[data-layout="sheet"] li { padding: 3px 1px; }
+body.layout-experiment[data-layout="vector"] .search-bar { padding: 5px; border-radius: 9px; }
+body.layout-experiment[data-layout="vector"] .search-bar button,
+body.layout-experiment[data-layout="vector"] .global-btn { border-radius: 7px; }
+body.layout-experiment[data-layout="vector"] .section { padding: 6px 8px; border-radius: 12px; }
+body.layout-experiment[data-layout="vector"] .section-header { padding-left: 30px; min-height: 26px; }
+body.layout-experiment[data-layout="vector"] .section::before { top: 6px; left: 7px; width: 25px; height: 25px; border-radius: 8px; background-size: 23px; }
+body.layout-experiment[data-layout="vector"] li { margin: 3px 0; padding: 4px 5px; border-radius: 6px; }
+body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-family: Arial, sans-serif; font-size: .7rem; }
+.layout-picker select { max-width: 160px; padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; background: #fff; color: #333; font: inherit; }
+.layout-picker select:focus-visible { outline: 2px solid #2762dc; outline-offset: 2px; }
+}
+@media print { .layout-picker { display: none !important; } }
+</style>
 </head>
 <body class="layout-experiment" data-layout="clean">
-<header class="layout-picker" aria-label="Escolher aparência">
-  <h1>Treinos do Caio</h1>
-  <p>Escolha o visual. Você continua montando e editando o treino do mesmo jeito.</p>
-  <div class="layout-options" role="group" aria-label="Modelos de layout">
-    <button type="button" data-layout-choice="clean" aria-pressed="true"><strong>1. Claro</strong><small>Limpo e organizado</small></button>
-    <button type="button" data-layout-choice="sport" aria-pressed="false"><strong>2. Esportivo</strong><small>Escuro com verde</small></button>
-    <button type="button" data-layout-choice="sheet" aria-pressed="false"><strong>3. Ficha</strong><small>Papel e tons quentes</small></button>
-    <button type="button" data-layout-choice="vector" aria-pressed="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8v8M3 10v4m15-6v8m3-6v4M6 12h12"/><circle cx="12" cy="12" r="10"/></svg><strong>4. Vetorial</strong><small>Ícones, formas e cores</small></button>
-  </div>
-</header>
 <div class="container" id="mainContainer">
   <div class="search-bar">
     <input type="text" id="searchName" placeholder="Nome do aluno" autocomplete="off">
@@ -438,6 +470,16 @@ body.layout-experiment[data-layout="vector"] .section-header { padding-left: 46p
   </div>
 
   <div class="footer" contenteditable="true">Personal Caio Macêdo</div>
+</div>
+
+<div class="layout-picker" aria-label="Escolher aparência">
+  <label for="layoutSelect">Visual:</label>
+  <select id="layoutSelect">
+    <option value="clean">1. Claro</option>
+    <option value="sport">2. Esportivo</option>
+    <option value="sheet">3. Ficha</option>
+    <option value="vector">4. Vetorial</option>
+  </select>
 </div>
 
 <div id="doubleTapHint" class="double-tap-hint">🔘 Toque duas vezes para mostrar botões</div>
@@ -1681,23 +1723,18 @@ body.layout-experiment[data-layout="vector"] .section-header { padding-left: 46p
 </script>
 <script id="layoutExperimentScript">
 (function () {
-  var choices = document.querySelectorAll('[data-layout-choice]');
+  var select = document.getElementById('layoutSelect');
   function applyLayout(value) {
     if (['clean', 'sport', 'sheet', 'vector'].indexOf(value) === -1) value = 'clean';
     document.body.setAttribute('data-layout', value);
-    choices.forEach(function (button) {
-      button.setAttribute('aria-pressed', String(button.getAttribute('data-layout-choice') === value));
-    });
+    select.value = value;
   }
   var saved = 'clean';
   try { saved = localStorage.getItem('caio_layout_experiment') || 'clean'; } catch (e) {}
   applyLayout(saved);
-  choices.forEach(function (button) {
-    button.addEventListener('click', function () {
-      var value = button.getAttribute('data-layout-choice');
-      applyLayout(value);
-      try { localStorage.setItem('caio_layout_experiment', value); } catch (e) {}
-    });
+  select.addEventListener('change', function () {
+    applyLayout(select.value);
+    try { localStorage.setItem('caio_layout_experiment', select.value); } catch (e) {}
   });
 })();
 </script>
