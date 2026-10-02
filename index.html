@@ -116,54 +116,6 @@ li, li * { font-size: 0.72rem !important; line-height: 1.4; color: #222; }
 }
 
 /* CONTEUDO DO PDF */
-#pdfBody {
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  padding: 4px 6px;
-  width: 100%;
-  max-width: 210mm;
-  margin: 0 auto;
-  font-size: 8.5pt;
-  line-height: 1.25;
-}
-#pdfBody .pdf-title { font-size: 12pt; font-weight: bold; text-align: center; color: #b22222; margin-bottom: 2px; }
-#pdfBody .pdf-subtitle { font-size: 7.5pt; text-align: center; color: #555; margin-bottom: 4px; }
-#pdfBody .pdf-sec { margin-bottom: 5px; border-left: 2px solid #ccc; padding-left: 5px; }
-#pdfBody .pdf-sec-title { font-size: 8.5pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
-#pdfBody .pdf-ex-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 2px; border-bottom: 0.5px solid #f0f0f0; padding-bottom: 1px; }
-#pdfBody .pdf-ex-name { font-size: 7.5pt; flex: 1; color: #222; line-height: 1.2; }
-#pdfBody .pdf-ex-name span { font-weight: bold; }
-#pdfBody .yt-link { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 2px; 
-  background: #ff0000; 
-  color: #fff; 
-  border: none; 
-  border-radius: 3px; 
-  padding: 1px 4px; 
-  font-size: 6.5pt; 
-  font-weight: bold; 
-  text-decoration: none; 
-  white-space: nowrap; 
-  flex-shrink: 0; 
-}
-#pdfBody .yt-link:hover { 
-  background: #cc0000; 
-  text-decoration: none; 
-}
-#pdfBody .yt-link svg { 
-  width: 8px; 
-  height: 8px; 
-  fill: white; 
-}
-#pdfBody .pdf-footer { text-align: center; font-size: 6.5pt; color: #888; margin-top: 5px; border-top: 0.5px solid #eee; padding-top: 3px; }
-.sec-a-color { color: #b22222; border-color: #b22222 !important; }
-.sec-b-color { color: #b8860b; border-color: #b8860b !important; }
-.sec-c-color { color: #2e8b57; border-color: #2e8b57 !important; }
-.sec-d-color { color: #00008b; border-color: #00008b !important; }
-.sec-e-color { color: #20b2aa; border-color: #20b2aa !important; }
-.sec-f-color { color: #9b59b6; border-color: #9b59b6 !important; }
-
 @media print {
   body { background: white; padding: 0; margin: 0; }
   .container { max-width: 100%; border: none; padding: 10px; }
@@ -350,6 +302,84 @@ body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; d
 }
 @media print { .layout-picker { display: none !important; } }
 </style>
+<style id="pdfLayoutStyles">
+.pdf-document {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  padding: 4px 6px;
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+  font-size: 8.5pt;
+  line-height: 1.25;
+}
+.pdf-document .pdf-title { font-size: 12pt; font-weight: bold; text-align: center; color: #b22222; margin-bottom: 2px; }
+.pdf-document .pdf-subtitle { font-size: 7.5pt; text-align: center; color: #555; margin-bottom: 4px; }
+.pdf-document .pdf-sec { margin-bottom: 5px; border-left: 2px solid #ccc; padding-left: 5px; }
+.pdf-document .pdf-sec-title { font-size: 8.5pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
+.pdf-document .pdf-ex-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 2px; border-bottom: 0.5px solid #f0f0f0; padding-bottom: 1px; }
+.pdf-document .pdf-ex-name { font-size: 7.5pt; flex: 1; color: #222; line-height: 1.2; }
+.pdf-document .pdf-ex-name span { font-weight: bold; }
+.pdf-document .yt-link { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 2px; 
+  background: #ff0000; 
+  color: #fff; 
+  border: none; 
+  border-radius: 3px; 
+  padding: 1px 4px; 
+  font-size: 6.5pt; 
+  font-weight: bold; 
+  text-decoration: none; 
+  white-space: nowrap; 
+  flex-shrink: 0; 
+}
+.pdf-document .yt-link:hover { 
+  background: #cc0000; 
+  text-decoration: none; 
+}
+.pdf-document .yt-link svg { 
+  width: 8px; 
+  height: 8px; 
+  fill: white; 
+}
+.pdf-document .pdf-footer { text-align: center; font-size: 6.5pt; color: #888; margin-top: 5px; border-top: 0.5px solid #eee; padding-top: 3px; }
+.sec-a-color { color: #b22222; border-color: #b22222 !important; }
+.sec-b-color { color: #b8860b; border-color: #b8860b !important; }
+.sec-c-color { color: #2e8b57; border-color: #2e8b57 !important; }
+.sec-d-color { color: #00008b; border-color: #00008b !important; }
+.sec-e-color { color: #20b2aa; border-color: #20b2aa !important; }
+.sec-f-color { color: #9b59b6; border-color: #9b59b6 !important; }
+
+
+.pdf-document { box-sizing: border-box; background: #fff; color: #222; }
+.pdf-document .pdf-sec { break-inside: avoid; page-break-inside: avoid; }
+.pdf-document .pdf-vector-icon { display: none; }
+.pdf-document[data-layout="clean"] .pdf-title { color: #244d85; }
+.pdf-document[data-layout="clean"] .pdf-sec { border: 1px solid #e2e8f0; border-left: 3px solid; border-radius: 5px; padding: 5px 7px; }
+.pdf-document[data-layout="sport"] { background: #101820; color: #f5f7fa; padding: 8px; }
+.pdf-document[data-layout="sport"] .pdf-title { color: #c9f55b; text-transform: uppercase; letter-spacing: .5px; }
+.pdf-document[data-layout="sport"] .pdf-subtitle,
+.pdf-document[data-layout="sport"] .pdf-footer { color: #d4dde5; }
+.pdf-document[data-layout="sport"] .pdf-sec { background: #fff; border-left-width: 5px; padding: 5px 7px; }
+.pdf-document[data-layout="sport"] .yt-link { background: #c9f55b; color: #18210a; }
+.pdf-document[data-layout="sport"] .yt-link svg { fill: #18210a; }
+.pdf-document[data-layout="sheet"] { background: #fffdf8; font-family: Georgia, serif; padding: 8px; }
+.pdf-document[data-layout="sheet"] .pdf-title { color: #785b3f; }
+.pdf-document[data-layout="sheet"] .pdf-sec { border-left: 0; border-top: 1px solid #cfc1ad; padding: 5px 0 0; }
+.pdf-document[data-layout="sheet"] .pdf-ex-row { border-bottom: 1px dashed #d8cebf; }
+.pdf-document[data-layout="sheet"] .yt-link { background: #785b3f; }
+.pdf-document[data-layout="vector"] { background: #faf9ff; padding: 8px; }
+.pdf-document[data-layout="vector"] .pdf-title { color: #5941b7; }
+.pdf-document[data-layout="vector"] .pdf-sec { border: 1px solid #d4cdf3; border-radius: 8px; background: #fff; padding: 6px; }
+.pdf-document[data-layout="vector"] .pdf-sec-title { color: #493389; display: flex; align-items: center; gap: 4px; }
+.pdf-document[data-layout="vector"] .pdf-vector-icon { display: inline-block; width: 16px; height: 16px; flex-shrink: 0; }
+.pdf-document[data-layout="vector"] .pdf-ex-row { background: #f6f4ff; border: 0; border-radius: 4px; padding: 3px 4px; margin-bottom: 3px; }
+.pdf-document[data-layout="vector"] .yt-link { background: #5941b7; }
+@media print {
+.pdf-document, .pdf-document * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+</style>
 </head>
 <body class="layout-experiment" data-layout="clean">
 <div class="container" id="mainContainer">
@@ -500,7 +530,7 @@ body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; d
   <div id="pdfViewerContent">
     <button class="pdf-close" id="closePdfViewer">✕ Fechar</button>
     <button class="pdf-download" id="downloadPdfBtn">⬇ Baixar PDF</button>
-    <div id="pdfBody"></div>
+    <div id="pdfBody" class="pdf-document"></div>
   </div>
 </div>
 
@@ -625,7 +655,7 @@ body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; d
       const exs = getExerciciosSecao(sec);
       if (!exs.length) continue;
       html += '<div class="pdf-sec ' + SEC_COLORS[sec] + '">';
-      html += '<div class="pdf-sec-title ' + SEC_COLORS[sec] + '">' + escHtml(titulo) + '</div>';
+      html += '<div class="pdf-sec-title ' + SEC_COLORS[sec] + '"><svg class="pdf-vector-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7v10M3 9v6m15-8v10m3-8v6M6 12h12"/></svg>' + escHtml(titulo) + '</div>';
       for (let ex of exs) {
         const url = ytSearchUrl(ex.nome);
         html += '<div class="pdf-ex-row">'
@@ -637,6 +667,9 @@ body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; d
     }
     html += '<div class="pdf-footer">' + escHtml(footer) + ' — ' + escHtml(hoje) + '</div>';
 
+    var pdfLayout = document.body.getAttribute('data-layout');
+    if (['clean', 'sport', 'sheet', 'vector'].indexOf(pdfLayout) === -1) pdfLayout = 'clean';
+    document.getElementById('pdfBody').setAttribute('data-layout', pdfLayout);
     document.getElementById('pdfBody').innerHTML = html;
     document.getElementById('pdfViewerModal').classList.add('open');
   }
@@ -722,9 +755,11 @@ body.layout-experiment .layout-picker { max-width: 400px; margin: 10px auto 0; d
       return;
     }
     win.document.open();
-    win.document.write('<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Treino PDF</title><style>' +
-      'body{font-family:Arial,sans-serif;margin:10mm;color:#222}.pdf-title{font-size:16px;font-weight:bold;text-align:center;color:#b22222}.pdf-subtitle,.pdf-footer{text-align:center;color:#555;font-size:11px}.pdf-sec{margin:8px 0;border-left:3px solid #ccc;padding-left:8px}.pdf-sec-title{font-weight:bold;text-transform:uppercase;margin-bottom:4px}.pdf-ex-row{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee;padding:3px 0}.pdf-ex-name{font-size:12px}.yt-link{background:#e00;color:white;text-decoration:none;border-radius:3px;padding:2px 5px;font-size:10px;font-weight:bold;white-space:nowrap}.yt-link svg{display:none}@media print{a[href]:after{content:""}}' +
-      '</style></head><body>' + pdfBody.innerHTML + '<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+    var sharedStyles = document.getElementById('pdfLayoutStyles').textContent;
+    win.document.write('<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>Treino PDF</title><style>'
+      + 'body{margin:10mm;}@page{size:A4;margin:5mm;}a[href]:after{content:""}'
+      + sharedStyles + '</style></head><body>' + pdfBody.outerHTML
+      + '<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
     win.document.close();
   }
   /* ===== HISTÓRICO UNDO/REDO ===== */
